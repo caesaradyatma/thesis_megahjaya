@@ -4,6 +4,7 @@
 
 @section('content')
   <h1>Pengeluaran</h1>
+  
   @if (count($outcomes)>0)
     <table class="table table-striped">
       <tr>

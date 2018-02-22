@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Outcome;
+use App\Utang;
 class OutcomesController extends Controller
 {
     /**
@@ -23,7 +25,9 @@ class OutcomesController extends Controller
     public function index()
     {
       $outcomes = Outcome::where('out_deleteStat',0)->orderBy('created_at','desc')->paginate(10);//ini buat pagination
+
       return view('finance.indexOutcome')->with('outcomes', $outcomes);
+
     }
 
     /**
@@ -48,7 +52,8 @@ class OutcomesController extends Controller
         'out_type' => 'required',
         'out_name' => 'required',
         'out_amount' => 'required',
-        'out_date' => 'required'
+        'out_date' => 'required',
+        'out_desc' => 'required'
       ]);
 
       //Create Outcome
@@ -142,8 +147,16 @@ class OutcomesController extends Controller
         $outcome = Outcome::find($out_id);
         //permanent deletion
         //$income->delete();
+
         //temp deletion
         $date = date('Y-m-d H:i:s');
+        if($outcome->out_type == 1){//if utang, delete from utang table also
+          $utg_id=$outcome->utg_id;
+          $utang= Utang::find($utg_id);
+          $utang->utg_deleteStat = 1;
+          $utang->utg_deletedAt = $date;
+          $utang->save();
+        }
         $outcome->user_id = auth()->user()->id;
         $outcome->out_deleteStat = 1;
         $outcome->out_deletedAt = $date;

@@ -18,7 +18,6 @@
                 </div>
             </div>
         </div> --}}
-
         <div class="col-md-8 col-md-offset-2">
           <div class="col-sm-6">
             <div class="panel panel-primary">
@@ -33,7 +32,7 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <div class="panel panel-primary">
+            <div class="panel panel-warning">
               <div class="panel-heading">
                 <h3 class="panel-title">Pengeluaran</h3>
               </div>
@@ -49,10 +48,10 @@
           <div class="col-sm-12">
             <div class="panel panel-success">
               <div class="panel-heading">
-                <h2>Balance</h2>
+                <h3>Balance</h3>
               </div>
               <div class="panel-body">
-                <h3></h3>
+                <h2>Rp {{number_format($balance)}}</h2>
               </div>
             </div>
           </div>

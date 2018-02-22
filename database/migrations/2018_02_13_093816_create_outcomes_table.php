@@ -20,7 +20,6 @@ class CreateOutcomesTable extends Migration
             $table->integer('out_amount');
             $table->date('out_date');
             $table->mediumText('out_desc');
-            $table->integer('user_id');
             $table->timestamps();
             $table->integer('out_deleteStat');
             $table->datetime('out_deletedAt');

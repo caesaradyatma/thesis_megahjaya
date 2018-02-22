@@ -61,8 +61,26 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="/incomes/create">
+                                <a href="/outcomes/create">
                                     Input Pengeluaran
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            Utang<span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="/utangs">
+                                    List Utang
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/utangs/create">
+                                    Input Utang
                                 </a>
                             </li>
                         </ul>
@@ -73,6 +91,11 @@
                         </a>
 
                         <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="/home">
+                                    Home
+                                </a>
+                            </li>
                             <li>
                                 <a href="{{ route('logout') }}"
                                     onclick="event.preventDefault();

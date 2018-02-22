@@ -29,6 +29,7 @@ class HomeController extends Controller
         $outcomes = Outcome::where('out_deleteStat',0)->orderBy('created_at','desc')->paginate(10);//ini buat pagination
         $totIncomes = 0;
         $totOutcomes = 0;
+        $balance = 0;
         foreach ($incomes as $income) {
           $totIncomes = $totIncomes + $income->in_amount;
         };
@@ -36,6 +37,8 @@ class HomeController extends Controller
           $totOutcomes = $totOutcomes + $outcome->out_amount;
         }
 
-        return view('home')->with('totIncomes', $totIncomes)->with('totOutcomes',$totOutcomes);
+        $balance = $totIncomes - $totOutcomes;
+
+        return view('home')->with('totIncomes', $totIncomes)->with('totOutcomes',$totOutcomes)->with('balance',$balance);
     }
 }
