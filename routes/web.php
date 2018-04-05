@@ -15,11 +15,11 @@
 //     return view('welcome');
 // });
 
-Route::get('/', 'PagesController@index');
+Route::get('/',function(){
+        return view('Pages.index');
+});
 
-Route::resource('posts','PostsController');
-
-Route::resource('incomes','FinanceIncomesController');
+Route::resource('incomes','IncomesController');
 
 Auth::routes();
 
@@ -28,3 +28,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('outcomes','OutcomesController');
 
 Route::resource('utangs','UtangsController');
+
+Route::resource('piutangs','PiutangsController');
+
+Route::resource('invoices','InvoicesController');

@@ -29,10 +29,10 @@ class UtangsController extends Controller
         $utangs = DB::table('utangs')
           ->join('outcomes','utangs.utg_id','=','outcomes.utg_id')
           ->select('utangs.*','outcomes.out_name','outcomes.out_amount')
-          ->where('utg_deleteStat',0)
+          ->where('utg_deletedAt',NULL)
           ->paginate(10);
         // $utangs = Utang::find();
-        return view('finance.indexUtang')->with('utangs',$utangs);
+        return view('finance.Utang.indexUtang')->with('utangs',$utangs);
 
     }
 
@@ -44,7 +44,7 @@ class UtangsController extends Controller
     public function create()
     {
         //
-        return view('finance.createUtang');
+        return view('finance.Utang.createUtang');
 
     }
 
@@ -98,10 +98,30 @@ class UtangsController extends Controller
     {
         //
         $utang = Utang::find($utg_id);
-        $outcome = DB::table('outcomes')->where('utg_id',$utg_id)->first();
-        // echo $outcome->out_name;
-        // echo $utang->outcome->out_name;
-        return view('finance.showUtang')->with('utang', $utang)->with('outcome',$outcome);
+
+        if($utang != NULL){
+          $outcome = DB::table('outcomes')->where('utg_id',$utg_id)->first();
+          // echo $outcome->out_name;
+          // echo $utang->outcome->out_name;
+          //validation
+          // $delStat1 = $utang->utg_deleteStat;
+          // $delStat2 = $outcome->out_deleteStat;
+          // if($delStat1 == 1 && $delStat2 == 1){
+          //   return redirect('/utangs')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
+          // }
+
+          $delDate1 = $utang->utg_deletedAt;
+          $delDate2 = $outcome->out_deletedAt;
+          if($delDate1 != NULL && $delDate2 != NULL){
+            return redirect('/utangs')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
+          }
+          else{
+            return view('finance.Utang.showUtang')->with('utang', $utang)->with('outcome',$outcome);
+          }
+        }
+        else{
+          return redirect('/utangs')->with('error', 'Data Yang Ingin Anda Akses Tidak Ada');
+        }
     }
 
     /**
@@ -114,9 +134,30 @@ class UtangsController extends Controller
     {
         //
         $utang = Utang::find($utg_id);
-        $outcome = DB::table('outcomes')->where('utg_id',$utg_id)->first();
 
-        return view('finance.editUtang')->with('utang',$utang)->with('outcome',$outcome);
+        if($utang != NULL){
+          $outcome = DB::table('outcomes')->where('utg_id',$utg_id)->first();
+          //validation
+          // $delStat1 = $utang->utg_deleteStat;
+          // $delStat2 = $outcome->out_deleteStat;
+          // if($delStat1 == 1 && $delStat2 == 1){
+          //   return redirect('/utangs')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
+          // }
+          //
+          // return view('finance.Utang.editUtang')->with('utang',$utang)->with('outcome',$outcome);
+
+          $delDate1 = $utang->utg_deletedAt;
+          $delDate2 = $outcome->out_deletedAt;
+          if($delDate1 != NULL && $delDate2 != NULL){
+            return redirect('/utangs')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
+          }
+          else{
+            return view('finance.Utang.showUtang')->with('utang', $utang)->with('outcome',$outcome);
+          }
+        }
+        else{
+    return redirect('/utangs')->with('error', 'Data Yang Ingin Anda Akses Tidak Ada');
+        }
     }
 
     /**
@@ -188,6 +229,6 @@ class UtangsController extends Controller
         $outcome->out_deleteStat = 1;
         $outcome->out_deletedAt = $date;
         $outcome->save();
-        return redirect('/outcomes')->with('success', 'Data Utang Telah Dihapus');
+        return redirect('/utangs')->with('success', 'Data Utang Telah Dihapus');
     }
 }

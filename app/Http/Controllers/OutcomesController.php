@@ -24,9 +24,9 @@ class OutcomesController extends Controller
      */
     public function index()
     {
-      $outcomes = Outcome::where('out_deleteStat',0)->orderBy('created_at','desc')->paginate(10);//ini buat pagination
+      $outcomes = Outcome::where('out_deletedAt',NULL)->orderBy('created_at','desc')->paginate(10);//ini buat pagination
 
-      return view('finance.indexOutcome')->with('outcomes', $outcomes);
+      return view('finance.Outcome.indexOutcome')->with('outcomes', $outcomes);
 
     }
 
@@ -37,7 +37,7 @@ class OutcomesController extends Controller
      */
     public function create()
     {
-        return view('finance.createOutcome');
+        return view('finance.Outcome.createOutcome');
     }
 
     /**
@@ -59,6 +59,7 @@ class OutcomesController extends Controller
       //Create Outcome
       $outcome = new Outcome;
       $outcome->out_type = $request->input('out_type');
+      $out_type = $request->input('out_type');
       $outcome->out_name = $request->input('out_name');
       $outcome->out_amount = $request->input('out_amount');
       $outcome->out_date = $request->input('out_date');
@@ -66,17 +67,20 @@ class OutcomesController extends Controller
       $outcome->out_desc = $request->input('out_desc');
       $outcome->out_deleteStat = 0;
       // $income->in_deletedAt = 0000-00-00 00:00:00;
-      $outcome->save();
 
-      // if($out_type == 1){
-      //
-      //   return view('finance.createUtang')
-      //     ->with('out_name',$out_name)
-      //     ->with('out_amount',$out_amount)
-      //     ->with('out_desc',$out_desc);
-      //
-      //   return view('finance.createUtang')->with('out_id',$out_id);
-      // }
+      if($out_type == 1){
+        $utang = new Utang;
+        $utang->utg_duedate = $request->input('out_date');
+        $utang->user_id = auth()->user()->id;
+        $utang->save();
+
+        $utang2 = Utang::orderBy('utg_id','desc')->first();
+        $lastUtg_id = $utang2->utg_id;
+
+      }
+
+      $outcome->utg_id = $lastUtg_id;
+      $outcome->save();
 
       return redirect('/outcomes')->with('success', 'Data Pengeluaran Berhasil Dibuat');
     }
@@ -90,7 +94,24 @@ class OutcomesController extends Controller
     public function show($out_id)
     {
       $outcome = Outcome::find($out_id);
-      return view('finance.showOutcome')->with('outcome', $outcome);
+      if($outcome != NULL){
+        // $delStat = $outcome->out_deleteStat;
+        //
+        // if($delStat == 1){
+        //   return redirect('/outcomes')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
+        // }
+
+        $delDate = $outcome->out_deletedAt;
+        if($delDate != NULL){
+          return redirect('/outcomes')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
+        }
+        else{
+          return view('finance.Outcome.showOutcome')->with('outcome', $outcome);
+        }
+      }
+      else{
+        return redirect('/outcomes')->with('error', 'Data Yang Ingin Anda Akses Tidak Ada');
+      }
     }
 
     /**
@@ -102,7 +123,23 @@ class OutcomesController extends Controller
     public function edit($out_id)
     {
         $outcome = Outcome::find($out_id);
-        return view('finance.editOutcome')->with('outcome', $outcome);
+        if($outcome == NULL){
+          // $delStat = $outcome->out_deleteStat;
+          // if($delStat == 1){
+          //   return redirect('/oitcomes')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
+          // }
+
+          $delDate = $outcome->out_deletedAt;
+          if($delDate != NULL){
+            return redirect('/outcomes')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
+          }
+          else{
+            return view('finance.Outcome.editOutcome')->with('outcome', $outcome);
+          }
+        }
+        else{
+          return redirect('/outcomes')->with('error', 'Data Yang Ingin Anda Akses Tidak Ada');
+        }
     }
 
     /**
@@ -124,14 +161,23 @@ class OutcomesController extends Controller
         //Update Post
         $outcome = Outcome::find($out_id);
         $outcome->out_type = $request->input('out_type');
+        $out_type = $request->input('out_type');
         $outcome->out_name = $request->input('out_name');
         $outcome->out_amount = $request->input('out_amount');
         $outcome->out_date = $request->input('out_date');
         $outcome->out_desc = $request->input('out_desc');
         $outcome->user_id = auth()->user()->id;
+        $utg_id = $outcome->utg_id;
         // $income->user_id = 1;
         // $income->in_deleteStat = 0;
         $outcome->save();
+
+        if($out_type == 1){
+          $utang = Utang::find($utg_id);
+          $utang->utg_duedate = $request->input('out_date');
+          $utang->user_id = auth()->user()->id;
+          $utang->save();
+        }
 
         return redirect('/outcomes')->with('success', 'Data Pengeluaran Berhasil Diupdate');
     }

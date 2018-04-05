@@ -6,7 +6,7 @@
   {!! Form::open(['action' => ['OutcomesController@update',$outcome->out_id], 'method' => 'POST']) !!}
     <div class="form-group">
       {{Form::label('out_type', 'Jenis Pengeluaran')}}
-      {{Form::select('out_type',['1'=>1,'2'=>2,'3'=>3],$outcome->out_type,['class'=>'form-control'])}}
+      {{Form::select('out_type',[1=>'Utang',2=>'Biaya', 3=>'DLL'],'',['class'=>'form-control'])}}
     </div>
     <div class="form-group">
       {{Form::label('out_name', 'Nama')}}

@@ -58,7 +58,7 @@
 
   <a href="/incomes/{{$income->in_id}}/edit" class="btn btn-warning">Edit Data</a>
 
-  {!!Form::open(['action'=>['FinanceIncomesController@destroy',$income->in_id],'method'=>'POST','class'=>'pull-right','onsubmit'=>"return confirm('Apakah anda yakin akan menghapus data ini?');"])!!}
+  {!!Form::open(['action'=>['IncomesController@destroy',$income->in_id],'method'=>'POST','class'=>'pull-right','onsubmit'=>"return confirm('Apakah anda yakin akan menghapus data ini?');"])!!}
     {{Form::hidden('_method','DELETE')}}
     {{Form::submit('Hapus Data',['class'=>'btn btn-danger'])}}
   {!!Form::close()!!}

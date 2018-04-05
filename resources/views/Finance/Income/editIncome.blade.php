@@ -3,7 +3,7 @@
 @include('includes.navbar')
 
 @section('content')
-  {!! Form::open(['action' => ['FinanceIncomesController@update',$income->in_id], 'method' => 'POST']) !!}
+  {!! Form::open(['action' => ['IncomesController@update',$income->in_id], 'method' => 'POST']) !!}
     <div class="form-group">
       {{Form::label('in_type', 'Jenis Pendapatan')}}
       {{Form::select('in_type',['1'=>1,'2'=>2,'3'=>3],$income->in_type,['class'=>'form-control'])}}

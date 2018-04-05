@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div> --}}
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12">
           <div class="col-sm-6">
             <div class="panel panel-primary">
               <div class="panel-heading">
@@ -28,6 +28,10 @@
                 <p>Total Pendapatan</p>
                 <h2>Rp {{number_format($totIncomes)}}</h2>
                 <a href="incomes" class="btn btn-primary">Lihat List Pendapatan</a>
+                <hr>
+                <p>Total Piutang</p>
+                <h3>Rp </h3>
+                <a href="piutangs" class="btn btn-primary">Lihat List Piutang</a>
               </div>
             </div>
           </div>
@@ -39,12 +43,16 @@
               <div class="panel-body">
                 <p>Total Pengeluaran</p>
                 <h2>Rp {{number_format($totOutcomes)}}</h2>
-                <a href="incomes" class="btn btn-primary">Lihat List Pengeluaran</a>
+                <a href="outcomes" class="btn btn-primary">Lihat List Pengeluaran</a>
+                <hr>
+                <p>Total Utang</p>
+                <h3>Rp </h3>
+                <a href="utangs" class="btn btn-primary">Lihat List Utang</a>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12">
           <div class="col-sm-12">
             <div class="panel panel-success">
               <div class="panel-heading">

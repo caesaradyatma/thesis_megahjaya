@@ -3,10 +3,10 @@
 @include('includes.navbar')
 
 @section('content')
-  {!! Form::open(['action' => 'FinanceIncomesController@store', 'method' => 'POST']) !!}
+  {!! Form::open(['action' => 'IncomesController@store', 'method' => 'POST']) !!}
     <div class="form-group">
       {{Form::label('in_type', 'Jenis Pendapatan')}}
-      {{Form::select('in_type',['1'=>1,'2'=>2,'3'=>3],'',['class'=>'form-control'])}}
+      {{Form::select('in_type',[1=>'Piutang',2=>'Penjualan', 3=>'Pendapatan Pribadi'],'',['class'=>'form-control'])}}
     </div>
     <div class="form-group">
       {{Form::label('in_name', 'Nama')}}
