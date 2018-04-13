@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Income;
 use App\Piutang;
+
+// use App\Http\Resources\Income as IncomeResource;
+
 class IncomesController extends Controller
 {
     /**
@@ -19,9 +22,17 @@ class IncomesController extends Controller
      }
     public function index()
     {
-        //
+
         $incomes = Income::where('in_deletedAt',NULL)->orderBy('created_at','desc')->paginate(10);//ini buat pagination
+
         return view('finance.Income.indexIncome')->with('incomes', $incomes);
+
+        //5.5
+        // return IncomeResource::collection($incomes);
+
+        //5.4
+        // return response()->json($incomes);
+
     }
 
     /**
@@ -69,10 +80,10 @@ class IncomesController extends Controller
 
           $piutang2 = Piutang::orderBy('piut_id','desc')->first();
           $lastpiut_id = $piutang2->piut_id;
-
+          $income->piut_id = $lastpiut_id;
         }
 
-        $income->piut_id = $lastpiut_id;
+
         $income->save();
 
 
