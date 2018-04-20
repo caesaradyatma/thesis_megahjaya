@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 //List Income
 Route::apiResource('/incomes','ApiIncomesController');
+
+// Route::post('register', 'ApiRegisterController@register');

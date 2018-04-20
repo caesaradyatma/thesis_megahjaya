@@ -32,3 +32,7 @@ Route::resource('utangs','UtangsController');
 Route::resource('piutangs','PiutangsController');
 
 Route::resource('invoices','InvoicesController');
+
+Route::get('inStatement','IncomeStatementController@index');
+
+Route::get('inStatement/report','IncomeStatementController@show');

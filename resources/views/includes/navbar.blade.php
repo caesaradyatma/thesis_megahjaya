@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-static-top">
+<nav class="navbar navbar-inverse navbar-static-top">
     <div class="container">
         <div class="navbar-header">
 
@@ -99,6 +99,24 @@
                             <li>
                                 <a href="/piutangs/create">
                                     Input Piutang
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            Laporan<span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="/inStatement">
+                                    Laporan Laba Rugi
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/balance">
+                                    Neraca
                                 </a>
                             </li>
                         </ul>
