@@ -76,10 +76,10 @@ class OutcomesController extends Controller
 
         $utang2 = Utang::orderBy('utg_id','desc')->first();
         $lastUtg_id = $utang2->utg_id;
-
+        $outcome->utg_id = $lastUtg_id;
       }
 
-      $outcome->utg_id = $lastUtg_id;
+
       $outcome->save();
 
       return redirect('/outcomes')->with('success', 'Data Pengeluaran Berhasil Dibuat');
@@ -123,7 +123,7 @@ class OutcomesController extends Controller
     public function edit($out_id)
     {
         $outcome = Outcome::find($out_id);
-        if($outcome == NULL){
+        if($outcome != NULL){
           // $delStat = $outcome->out_deleteStat;
           // if($delStat == 1){
           //   return redirect('/oitcomes')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
@@ -178,6 +178,7 @@ class OutcomesController extends Controller
           $utang->user_id = auth()->user()->id;
           $utang->save();
         }
+
 
         return redirect('/outcomes')->with('success', 'Data Pengeluaran Berhasil Diupdate');
     }

@@ -76,43 +76,41 @@ class IncomeStatementController extends Controller
         // }
 
         //retrieve incomes
-        $piutangs = Income::where('in_deletedAt',NULL)->where('in_type',1)->whereBetween('in_date',[$period1,$period2])->get();
+        // $piutangs = Income::where('in_deletedAt',NULL)->where('in_type',1)->whereBetween('in_date',[$period1,$period2])->get();
         $sales = Income::where('in_deletedAt',NULL)->where('in_type',2)->whereBetween('in_date',[$period1,$period2])->get();
-        $totPiutangs = 0;
+        // $totPiutangs = 0;
         $totSales = 0;
 
         //retrieve expenses
         $costs = Outcome::where('out_deletedAt',NULL)->where('out_type',2)->whereBetween('out_date',[$period1,$period2])->get();
-        $utangs = Outcome::where('out_deletedAt',NULL)->where('out_type',1)->whereBetween('out_date',[$period1,$period2])->get();
+        // $utangs = Outcome::where('out_deletedAt',NULL)->where('out_type',1)->whereBetween('out_date',[$period1,$period2])->get();
         $totCosts = 0;
-        $totUtangs = 0;
+        // $totUtangs = 0;
 
         //count incomes
-        foreach($piutangs as $piutang){
-          $totPiutangs = $totPiutangs + $piutang->in_amount;
-        }
+        // foreach($piutangs as $piutang){
+        //   $totPiutangs = $totPiutangs + $piutang->in_amount;
+        // }
         foreach($sales as $sale){
           $totSales = $totSales + $sale->in_amount;
         }
-        $totIncomes = $totPiutangs + $totSales;
+        $totIncomes = $totSales;
 
         //count expenses
-        foreach($utangs as $utang){
-          $totUtangs = $totUtangs + $utang->out_amount;
-        }
+        // foreach($utangs as $utang){
+        //   $totUtangs = $totUtangs + $utang->out_amount;
+        // }
 
         foreach($costs as $cost){
           $totCosts = $totCosts + $cost->out_amount;
         }
-        $totExpenses = $totCosts + $totUtangs;
+        $totExpenses = $totCosts;
 
         return view('/finance.Report.showIncomeStatement')
         ->with('totIncomes',$totIncomes)
         ->with('totExpenses',$totExpenses)
-        ->with('totPiutangs',$totPiutangs)
         ->with('totSales',$totSales)
         ->with('costs',$costs)
-        ->with('totUtangs',$totUtangs)
         ->with('totCosts',$totCosts);
         // return view('/finance.Report.showIncomeStatement')->with('incomes',$incomes);
     }

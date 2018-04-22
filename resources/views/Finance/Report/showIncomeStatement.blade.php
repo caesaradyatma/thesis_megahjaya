@@ -27,48 +27,93 @@
       <div class="col-sm-12">
         <table class="table">
           <tr>
-            <th colspan="3">Revenue</th>
-          </tr>
-          <tr>
-            <td style="padding-left:30px;">Sales</td>
-            <td style="text-align:right;">{{number_format($totSales)}}</td>
+            <th>Sales</th>
             <td></td>
+            <td style="text-align:right;">{{number_format($totSales)}}</td>
           </tr>
-          <tr>
+          {{-- <tr>
             <td style="padding-left:30px;">Accounts Receivable</td>
             <td style="text-align:right;">{{number_format($totPiutangs)}}</td>
             <td></td>
+          </tr> --}}
+          <tr>
+            <th>Cost of Goods Sold</th>
+            <td></td>
+            <td></td>
           </tr>
           <tr>
-            <th>Total Revenue</th>
+            <td style="padding-left:50px;">Opening Inventories</td>
+            <td>isi disini</td>
             <td></td>
-            <td>{{number_format($totPiutangs + $totSales)}}</td>
+          </tr>
+          <tr>
+            <td style="padding-left:50px;">Purchased Inventories</td>
+            <td>isi disini</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td style="padding-left:50px;">Closing Inventories</td>
+            <td>isi disini</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>(Total COGS)</td>
+          </tr>
+          <tr>
+            <th>Gross Profit</th>
+            <td></td>
+            <td>{{number_format($totIncomes)}}</td>
             <td>
           </tr>
           <tr>
-            <th colspan="3">Expenses</th>
+            <th colspan="3">Operating Expenses</th>
           </tr>
           <tr>
-            @foreach ($costs as $cost)
+            {{-- @foreach ($costs as $cost)
               <td style="padding-left:30px;">{{$cost->out_name}}</td>
               <td style="text-align:right;">{{number_format($cost->out_amount)}}</td>
               <td></td>
-            @endforeach
+            @endforeach --}}
+            <td style="padding-left:30px;">Utilities</td>
+            <td>{{number_format($totCosts)}}</td>
+            <td></td>
           </tr>
           <tr>
+            <td style="padding-left:30px;">Salaries</td>
+            <td>isi disini</td>
+            <td></td>
+          </tr>
+          {{-- <tr>
             <td style="padding-left:30px;">Accounts Payable</td>
             <td style="text-align:right;">{{number_format($totUtangs)}}</td>
             <td></td>
-          </tr>
+          </tr> --}}
           <tr>
-            <th>Total Expenses</th>
+            <th></th>
             <td></td>
-            <td>{{number_format($totUtangs+$totCosts)}}</td>
+            <td>({{number_format($totExpenses)}})</td>
           </tr>
           <tr>
-            <th>Net Income</th>
+            <th>Operating Income</th>
             <td></td>
             <td>{{number_format($totIncomes-$totExpenses)}}</td>
+          </tr>
+          <tr>
+            <th>Income Before Tax</th>
+            <td></td>
+            <td>isi disini</td>
+          </tr>
+          <tr>
+            <td>Income Tax</td>
+            <td></td>
+            <td>(isi disini)</td>
+          </tr>
+          <tr>
+            <th>Net Profit</th>
+            <td></td>
+            <td>isi disini</td>
           </tr>
         </table>
       </div>

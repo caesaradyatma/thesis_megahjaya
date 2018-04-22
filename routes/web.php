@@ -36,3 +36,9 @@ Route::resource('invoices','InvoicesController');
 Route::get('inStatement','IncomeStatementController@index');
 
 Route::get('inStatement/report','IncomeStatementController@show');
+
+Route::get('cashFlow','CashFlowStatementController@index');
+
+Route::get('cashFlow/report','CashFlowStatementController@show');
+
+Route::resource('employees','EmployeeController');
