@@ -15,7 +15,12 @@ class EmployeeController extends Controller
     public function index()
     {
         //
-        $employees = Employee::where('emp_deletedAt',NULL)->orderBy('created_at','desc')->paginate(10);//ini buat pagination
+        // $date = date('Y-m-d');
+        // $dayofweek = date('w', strtotime($date));
+        // echo $date;
+        // echo $dayofweek;
+
+        $employees = Employee::where('emp_deletedAt',NULL)->orderBy('id','asc')->paginate(10);//ini buat pagination
         return view('hr.indexEmployee')->with('employees',$employees);
     }
 

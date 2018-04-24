@@ -42,3 +42,5 @@ Route::get('cashFlow','CashFlowStatementController@index');
 Route::get('cashFlow/report','CashFlowStatementController@show');
 
 Route::resource('employees','EmployeeController');
+
+Route::get('attendance','AttendanceListController@index');
