@@ -5,7 +5,7 @@
       <h1>Absensi Pegawai</h1>
       <small>Tanggal {{$date}}</small>
       <hr>
-      {!! Form::open(['action' => 'AttendanceListController@index','method' => 'POST']) !!}
+      {!! Form::open(['action' => 'AttendanceController@create','method' => 'POST']) !!}
         <table class='table table-striped' style="text-align:center;">
           <tr>
             <th>ID</th>

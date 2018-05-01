@@ -29,7 +29,7 @@
           <tr>
             <th>Sales</th>
             <td></td>
-            <td style="text-align:right;">{{number_format($totSales)}}</td>
+            <td>{{number_format($totSales)}}</td>
           </tr>
           {{-- <tr>
             <td style="padding-left:30px;">Accounts Receivable</td>

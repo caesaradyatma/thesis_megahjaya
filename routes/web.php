@@ -31,7 +31,7 @@ Route::resource('utangs','UtangsController');
 
 Route::resource('piutangs','PiutangsController');
 
-Route::resource('invoices','InvoicesController');
+// Route::resource('invoices','InvoicesController');
 
 Route::get('inStatement','IncomeStatementController@index');
 
@@ -43,4 +43,16 @@ Route::get('cashFlow/report','CashFlowStatementController@show');
 
 Route::resource('employees','EmployeeController');
 
-Route::get('attendance','AttendanceListController@index');
+Route::get('attendance','AttendanceController@index');
+
+Route::post('attendance/submit','AttendanceController@create');
+
+Route::get('invoices/','InvoicesController@index');
+
+Route::get('invoices/create','InvoicesController@create');
+
+Route::get('invoices/{invoice}/getAddToCart','InvoicesController@getAddToCart');
+
+Route::get('invoices/getCart','InvoicesController@getCart');
+
+Route::post('invoices/','InvoicesController@store');

@@ -3,18 +3,29 @@
 @include('includes.navbar')
 
 @section('content')
-  <h1>Penjualan</h1>
+  <h1>Invoice/Bon</h1>
   <div class="row">
-    <center>
-      <div class="col-sm-6">
-        <h2>Top Selling Item</h2>
-      </div>
-      <div class="col-sm-6">
-        <h2>Top Customer</h2>
-      </div>
-      <div class="col-sm-12">
-        <h2>Pending Order<h2>
-      </div>
-    </center>
+    <table class="table table-striped">
+      <tr>
+        <th>ID</th>
+        <th>Tanggal Transaksi</th>
+        <th>Nama Pelanggan</th>
+        <th>Jumlah Transaksi</th>
+        <th>Jenis Transaksi</th>
+        <th>Status</th>
+        <th>Barang Yang dibeli</th>
+      </tr>
+      @foreach ($invoices as $invoice)
+        <tr>
+          <td>{{$invoice->id}}</td>
+          <td>{{$invoice->inv_date}}</td>
+          <td>{{$invoice->cst_id}}</td>
+          <td>{{$invoice->inv_totPrice}}</td>
+          <td>{{$invoice->inv_type}}</td>
+          <td>{{$invoice->inv_status}}</td>
+          <td>{{$invoice->inv_products}}</td>
+        </tr>
+      @endforeach
+    </table>
   </div>
 @endsection
