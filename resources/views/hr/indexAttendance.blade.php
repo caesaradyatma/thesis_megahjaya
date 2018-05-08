@@ -5,7 +5,7 @@
       <h1>Absensi Pegawai</h1>
       <small>Tanggal {{$date}}</small>
       <hr>
-      {!! Form::open(['action' => 'AttendanceController@create','method' => 'POST']) !!}
+      {!! Form::open(['action' => 'AttendanceController@store','method' => 'POST']) !!}
         <table class='table table-striped' style="text-align:center;">
           <tr>
             <th>ID</th>
@@ -21,7 +21,7 @@
               <td>{{$employee->emp_type}}</td>
               <td>{{$employee->emp_contact}}</td>
               {{-- <td><a href='employees/{{$employee->id}}'class='btn btn-default'>Details</a></td> --}}
-              <td>{{Form::select('emp_type',[1=>'Hadir',2=>'Tidak Hadir'],'',['class'=>'form-control'])}}</td>
+              <td>{{Form::select('emp_type[]',[1=>'Hadir',2=>'Tidak Hadir'],'',['class'=>'form-control'])}}</td>
             </tr>
           @endforeach
         </table>

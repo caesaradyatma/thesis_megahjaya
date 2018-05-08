@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Attendance;
 use App\Employee;
 
+
 class AttendanceController extends Controller
 {
     //
@@ -22,7 +23,16 @@ class AttendanceController extends Controller
 
     }
 
-    public function create(){
-      return view('hr.indexEmployee');
+    public function store(Request $request){
+      $attendance = new Attendance;
+      $date = date('Y-m-d');
+      // $x = 0;
+      // $atd_ids[$x];
+      $rawids = $request->input('emp_type');
+      $ids=json_encode($rawids);
+      // $ids=implode(",",$rawids);
+
+      $attendance->atd_ids = $ids;
+      $attendance->save();
     }
 }

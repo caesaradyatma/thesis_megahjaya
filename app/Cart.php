@@ -16,19 +16,39 @@ class Cart
     }
   }
 
-  public function add($item, $id)
+  public function add($item, $id, $order_qty)
   {
-    $storedItem = ['id'=>$id,'item_quantity' => 0, 'item_price' => $item->item_price, 'item' => $item ];
+    $storedItem = ['id'=>$id,'order_quantity' => $order_qty, 'item_price' => $item->item_price, 'item' => $item ];
     if($this->items){
       if(array_key_exists($id, $this->items)){
         $storedItem = $this->items[$id];
+        $storedItem['order_quantity'] = $storedItem['order_quantity'] + $order_qty;
       }
     }
-    $storedItem['item_quantity']++;
-    $storedItem['item_price'] = $item->item_price * $storedItem['item_quantity'];
+    // $storedItem['order_quantity']++;
+
+    $storedItem['item_price'] = $item->item_price * $storedItem['order_quantity'];
     // $this->items[$id];
-    $this->totQty ++;
-    $this->totPrice += $item->item_price;
+    $this->totQty += $storedItem['order_quantity'];
+    // $this->totPrice += $item->item_price;
+    $this->totPrice += $storedItem['item_price'];
     $this->items[$id] = $storedItem;
+  }
+
+  public function modify($item, $id, $order_qty)
+  {
+    // $storedItem = ['id'=>$id,'order_quantity' => $order_qty, 'item_price' => $item->item_price, 'item' => $item ];
+    if($this->items){
+      if(array_key_exists($id, $this->items)){
+        $storedItem = $this->items[$id];
+        $this->totPrice -= $storedItem['item_price'];
+        $this->totQty -= $storedItem['order_quantity'];
+        $storedItem['order_quantity'] = $order_qty;
+      }
+      $storedItem['item_price'] = $item->item_price * $storedItem['order_quantity'];
+      $this->totQty += $storedItem['order_quantity'];
+      $this->totPrice += $storedItem['item_price'];
+      $this->items[$id] = $storedItem;
+    }
   }
 }

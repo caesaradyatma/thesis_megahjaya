@@ -45,14 +45,30 @@ Route::resource('employees','EmployeeController');
 
 Route::get('attendance','AttendanceController@index');
 
-Route::post('attendance/submit','AttendanceController@create');
+Route::post('attendance/submit','AttendanceController@store');
 
 Route::get('invoices/','InvoicesController@index');
 
-Route::get('invoices/create','InvoicesController@create');
+Route::get('invoices/create','InvoicesController@cartForm');
 
-Route::get('invoices/{invoice}/getAddToCart','InvoicesController@getAddToCart');
+Route::post('invoices/create','InvoicesController@createCart');
 
 Route::get('invoices/getCart','InvoicesController@getCart');
 
 Route::post('invoices/','InvoicesController@store');
+
+// Route::get('invoices/create2','InvoicesController@cartForm');
+//
+// Route::post('invoices/create2','InvoicesController@createCart');
+
+Route::get('invoices/detail/{id}','InvoicesController@show');
+
+Route::delete('invoices/detail/{id}', 'InvoicesController@destroy');
+
+Route::post('invoices/search','InvoicesController@searchProduct');
+
+Route::get('invoices/getCart/deleteCart', 'InvoicesController@destroyCart');
+
+Route::post('invoices/editCart', 'InvoicesController@editCart');
+
+Route::post('invoices/searchInvoice','InvoicesController@searchInvoice');
