@@ -168,11 +168,12 @@ class InvoicesController extends Controller
           Session::forget('cart');
 
           $invoices = Invoice::where('deleted_at',NULL)->paginate(10);
-          $cst_names = DB::table('invoices')
-            ->leftJoin('customers','invoices.cst_id','=','customers.id')
-            ->select('invoices.*','customers.cst_name')
-            ->get();
-          return view('finance.Invoice.indexInvoice')->with('invoices',$invoices)->with('cst_names',$cst_names);
+          return redirect('index')->with('success','Invoice berhasil dibuat');
+          // $cst_names = DB::table('invoices')
+          //   ->leftJoin('customers','invoices.cst_id','=','customers.id')
+          //   ->select('invoices.*','customers.cst_name')
+          //   ->get();
+          // return view('finance.Invoice.indexInvoice')->with('invoices',$invoices)->with('cst_names',$cst_names);
         }
         else{
           $newCust = new Customer;
@@ -190,23 +191,25 @@ class InvoicesController extends Controller
           $invoice->inv_totPrice = $request->input('inv_totPrice');
           $invoice->inv_type = $request->input('inv_type');
           $inv_type = $request->input('inv_type');
+          $invoice->cst_id = $custID;
           if($inv_type == 0){
             $invoice->inv_status=0;
           }
           else{
             $invoice->inv_status=1;
           }
-          // $invoice->cst_id = $custID;
+
           $invoice->inv_products = json_encode($cart);
           $invoice->save();
           Session::forget('cart');
 
           $invoices = Invoice::where('deleted_at',NULL)->paginate(10);
-          $cst_names = DB::table('invoices')
-            ->leftJoin('customers','invoices.cst_id','=','customers.id')
-            ->select('invoices.*','customers.cst_name')
-            ->get();
-          return view('finance.Invoice.indexInvoice')->with('invoices',$invoices)->with('cst_names',$cst_names);
+          return redirect('index')->with('success','Invoice berhasil dibuat');
+          // $cst_names = DB::table('invoices')
+          //   ->leftJoin('customers','invoices.cst_id','=','customers.id')
+          //   ->select('invoices.*','customers.cst_name')
+          //   ->get();
+          // return view('finance.Invoice.indexInvoice')->with('invoices',$invoices)->with('cst_names',$cst_names);
         }
     }
 
@@ -234,6 +237,10 @@ class InvoicesController extends Controller
       $inv_day = $request->input('inv_day');
       $inv_month = $request->input('inv_month');
       $inv_year = $request->input('inv_year');
+
+      if($inv_id == NULL && $cst_name == NULL && $cst_company == NULL && $inv_day == NULL && $inv_month == NULL && $inv_year == NULL){
+        return redirect('invoices')->with('error','Form pencarian kosong');
+      }
 
       if($inv_day != NULL && $inv_month != NULL && $inv_year != NULL){
         //semua isi
@@ -265,7 +272,6 @@ class InvoicesController extends Controller
             ->get();
 
           if($customers->isEmpty()){//if result not found
-            echo "ga ada asu";
             return redirect('/invoices')->with('error','Data Invoice tidak ada');
           }
 
@@ -275,10 +281,8 @@ class InvoicesController extends Controller
           $invoices = Invoice::whereIn('cst_id',$cst_id)//get invoices
             ->where('inv_date',$date)
             ->get();
-          foreach($invoices as $invoice){
-            echo $invoice->inv_id;
-          }
-          if($invoices == NULL){//if result not found
+
+          if($invoices->isEmpty()){//if result not found
             return redirect('/invoices')->with('error','Data Invoice tidak ada');
           }
           else{
@@ -309,9 +313,7 @@ class InvoicesController extends Controller
           $invoices = Invoice::whereIn('cst_id',$cst_id)//get invoices
             ->where('inv_date',$date)
             ->get();
-          foreach($invoices as $invoice){
-            echo $invoice->inv_id;
-          }
+
           if($invoices->isEmpty()){//if result not found
             return redirect('/invoices')->with('error','Data Invoice tidak ada');
           }
@@ -413,40 +415,11 @@ class InvoicesController extends Controller
             return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
           }
         }
-      }
+      }//end tahun sama bulan isi
       else if($inv_day == NULL && $inv_month == NULL && $inv_year != NULL){
         //tahun isi
         $oldformat1 = strtotime($inv_year.'-01-1');
         $oldformat2 = strtotime($inv_year.'-12-31');
-        $date1 = date('Y-m-d',$oldformat1);
-        $date2 = date('Y-m-d',$oldformat2);
-        echo $date1;
-        echo"<br>";
-        echo $date2;
-      }
-      else if($inv_day == NULL && $inv_month != NULL && $inv_year == NULL){
-        //bulan isi
-        $oldformat1 = strtotime('1998-'.$inv_month.'-1');
-        $oldformat2 = strtotime('2030-'.$inv_month.'-31');
-        $date1 = date('Y-m-d',$oldformat1);
-        $date2 = date('Y-m-d',$oldformat2);
-        echo $date1;
-        echo"<br>";
-        echo $date2;
-      }
-      else if($inv_day != NULL && $inv_month == NULL && $inv_year != NULL){
-        //tahun sama hari isi
-        $oldformat1 = strtotime($inv_year.'-'.'01'.'-'.$inv_day);
-        $oldformat2 = strtotime($inv_year.'-'.'12'.'-'.$inv_day);
-        $date1 = date('Y-m-d',$oldformat1);
-        $date2 = date('Y-m-d',$oldformat2);
-
-
-      }
-      else if($inv_day == NULL && $inv_month == NULL && $inv_year == NULL){
-        //kosong semua
-        $oldformat1 = strtotime('1998-01-01');
-        $oldformat2 = strtotime('2030-12-31');
         $date1 = date('Y-m-d',$oldformat1);
         $date2 = date('Y-m-d',$oldformat2);
 
@@ -531,8 +504,274 @@ class InvoicesController extends Controller
           }
 
         }
+      }//end tahun isi
+      else if($inv_day == NULL && $inv_month != NULL && $inv_year == NULL){
+        //bulan isi
+        $oldformat1 = strtotime('1998-'.$inv_month.'-1');
+        $oldformat2 = strtotime('2030-'.$inv_month.'-31');
+        $date1 = date('Y-m-d',$oldformat1);
+        $date2 = date('Y-m-d',$oldformat2);
 
-      }
+        if($inv_id!=NULL){//if id ada isinya
+          $invoices = Invoice::where('inv_id',$inv_id)
+            ->get();
+          if($invoices->isEmpty()){//if rsult not found
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+          else{
+            $joins = DB::table('invoices')
+              ->leftJoin('customers','invoices.cst_id','=','customers.id')
+              ->where('inv_id',$inv_id)
+              ->select('invoices.*','customers.cst_name')
+              ->get();
+
+            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+          }
+        }
+
+        if($cst_name!=NULL)//if cst name ada isinya
+        {
+          $customers = Customer::where('cst_name',$cst_name)
+            ->orWhere('cst_name','like','%'.$cst_name.'%')
+            ->get();
+
+          if($customers->isEmpty()){//if result not found
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+
+          foreach($customers as $customer){//if customer found
+            $cst_id[] = $customer->id;
+          }
+          $invoices = Invoice::whereIn('cst_id',$cst_id)//get invoices
+            ->whereBetween('inv_date',[$date1,$date2])
+            ->get();
+
+
+          if($invoices->isEmpty()){//if result not found
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+          else{
+            $joins = DB::table('invoices')
+              ->leftJoin('customers','invoices.cst_id','=','customers.id')
+              ->whereIn('cst_id',$cst_id)
+              ->select('invoices.*','customers.cst_name')
+              ->get();
+
+            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+          }
+        }
+
+        if($cst_company!=NULL)//if cst company ada isinya
+        {
+          $customers = Customer::where('cst_company',$cst_company)
+            ->orWhere('cst_company','like','%'.$cst_company.'%')
+            ->get();
+
+          if($customers->isEmpty()){//if result not found
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+
+          foreach($customers as $customer){//if customer found
+            $cst_id[] = $customer->id;
+          }
+          $invoices = Invoice::whereIn('cst_id',$cst_id)//get invoices
+            ->whereBetween('inv_date',[$date1,$date2])
+            ->get();
+
+          if($invoices->isEmpty()){//if result not found
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+          else{
+            $joins = DB::table('invoices')
+              ->leftJoin('customers','invoices.cst_id','=','customers.id')
+              ->whereIn('cst_id',$cst_id)
+              ->select('invoices.*','customers.cst_name')
+              ->get();
+
+            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+          }
+
+        }
+      }//end bulan isi
+      else if($inv_day != NULL && $inv_month == NULL && $inv_year != NULL){
+        //tahun sama hari isi
+        $oldformat1 = strtotime($inv_year.'-'.'01'.'-'.$inv_day);
+        $oldformat2 = strtotime($inv_year.'-'.'12'.'-'.$inv_day);
+        $date1 = date('Y-m-d',$oldformat1);
+        $date2 = date('Y-m-d',$oldformat2);
+
+        if($inv_id!=NULL){//if id ada isinya
+          $invoices = Invoice::where('inv_id',$inv_id)
+            ->get();
+          if($invoices->isEmpty()){//if rsult not found
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+          else{
+            $joins = DB::table('invoices')
+              ->leftJoin('customers','invoices.cst_id','=','customers.id')
+              ->where('inv_id',$inv_id)
+              ->select('invoices.*','customers.cst_name')
+              ->get();
+
+            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+          }
+        }
+
+        if($cst_name!=NULL)//if cst name ada isinya
+        {
+          $customers = Customer::where('cst_name',$cst_name)
+            ->orWhere('cst_name','like','%'.$cst_name.'%')
+            ->get();
+
+          if($customers->isEmpty()){//if result not found
+
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+
+          foreach($customers as $customer){//if customer found
+            $cst_id[] = $customer->id;
+          }
+          $invoices = Invoice::whereIn('cst_id',$cst_id)//get invoices
+            ->whereBetween('inv_date',[$date1,$date2])
+            ->get();
+
+
+          if($invoices->isEmpty()){//if result not found
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+          else{
+            $joins = DB::table('invoices')
+              ->leftJoin('customers','invoices.cst_id','=','customers.id')
+              ->whereIn('cst_id',$cst_id)
+              ->select('invoices.*','customers.cst_name')
+              ->get();
+
+            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+          }
+        }
+
+        if($cst_company!=NULL)//if cst company ada isinya
+        {
+          $customers = Customer::where('cst_company',$cst_company)
+            ->orWhere('cst_company','like','%'.$cst_company.'%')
+            ->get();
+
+          if($customers->isEmpty()){//if result not found
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+
+          foreach($customers as $customer){//if customer found
+            $cst_id[] = $customer->id;
+          }
+          $invoices = Invoice::whereIn('cst_id',$cst_id)//get invoices
+            ->whereBetween('inv_date',[$date1,$date2])
+            ->get();
+
+          if($invoices->isEmpty()){//if result not found
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+          else{
+            $joins = DB::table('invoices')
+              ->leftJoin('customers','invoices.cst_id','=','customers.id')
+              ->whereIn('cst_id',$cst_id)
+              ->select('invoices.*','customers.cst_name')
+              ->get();
+
+            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+          }
+
+        }
+      }//end tahun sm hari isi
+      else if($inv_day == NULL && $inv_month == NULL && $inv_year == NULL){
+        //kosong semua
+        $oldformat1 = strtotime('1998-01-01');
+        $oldformat2 = strtotime('2030-12-31');
+        $date1 = date('Y-m-d',$oldformat1);
+        $date2 = date('Y-m-d',$oldformat2);
+
+        if($inv_id!=NULL){//if id ada isinya
+          $invoices = Invoice::where('inv_id',$inv_id)
+            ->get();
+          if($invoices->isEmpty()){//if rsult not found
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+          else{
+            $joins = DB::table('invoices')
+              ->leftJoin('customers','invoices.cst_id','=','customers.id')
+              ->where('inv_id',$inv_id)
+              ->select('invoices.*','customers.cst_name')
+              ->get();
+
+            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+          }
+        }
+
+        if($cst_name!=NULL)//if cst name ada isinya
+        {
+          $customers = Customer::where('cst_name',$cst_name)
+            ->orWhere('cst_name','like','%'.$cst_name.'%')
+            ->get();
+
+          if($customers->isEmpty()){//if result not found
+
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+
+          foreach($customers as $customer){//if customer found
+            $cst_id[] = $customer->id;
+          }
+          $invoices = Invoice::whereIn('cst_id',$cst_id)//get invoices
+            ->whereBetween('inv_date',[$date1,$date2])
+            ->get();
+
+
+          if($invoices->isEmpty()){//if result not found
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+          else{
+            $joins = DB::table('invoices')
+              ->leftJoin('customers','invoices.cst_id','=','customers.id')
+              ->whereIn('cst_id',$cst_id)
+              ->select('invoices.*','customers.cst_name')
+              ->get();
+
+            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+          }
+        }
+
+        if($cst_company!=NULL)//if cst company ada isinya
+        {
+          $customers = Customer::where('cst_company',$cst_company)
+            ->orWhere('cst_company','like','%'.$cst_company.'%')
+            ->get();
+
+          if($customers->isEmpty()){//if result not found
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+
+          foreach($customers as $customer){//if customer found
+            $cst_id[] = $customer->id;
+          }
+          $invoices = Invoice::whereIn('cst_id',$cst_id)//get invoices
+            ->whereBetween('inv_date',[$date1,$date2])
+            ->get();
+
+          if($invoices->isEmpty()){//if result not found
+            return redirect('/invoices')->with('error','Data Invoice tidak ada');
+          }
+          else{
+            $joins = DB::table('invoices')
+              ->leftJoin('customers','invoices.cst_id','=','customers.id')
+              ->whereIn('cst_id',$cst_id)
+              ->select('invoices.*','customers.cst_name')
+              ->get();
+
+            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+          }
+
+        }
+
+      }//end kosong semua
 
 
     }

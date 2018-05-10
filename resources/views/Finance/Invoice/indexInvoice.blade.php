@@ -54,6 +54,7 @@
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
         Cari Invoice
       </button>
+      <a href="invoices/create" class="btn btn-success">Buat Invoice Baru</a>
       <hr>
     </div>
   </div>

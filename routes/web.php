@@ -45,6 +45,10 @@ Route::resource('employees','EmployeeController');
 
 Route::get('attendance','AttendanceController@index');
 
+Route::get('attendance/attend/{id}','AttendanceController@createEmpCart');
+
+Route::get('attendance/test','AttendanceController@getEmpCart');
+
 Route::post('attendance/submit','AttendanceController@store');
 
 Route::get('invoices/','InvoicesController@index');
