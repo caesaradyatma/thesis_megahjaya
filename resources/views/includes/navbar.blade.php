@@ -46,6 +46,11 @@
                                     Input Data Pegawai
                                 </a>
                             </li>
+                            <li>
+                                <a href="/attendance">
+                                    Absensi Pegawai
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li class="dropdown">

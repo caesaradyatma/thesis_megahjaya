@@ -11,6 +11,10 @@ use Session;
 
 class AttendanceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     //
     public function index(){
       $date = date('Y-m-d');
@@ -20,15 +24,25 @@ class AttendanceController extends Controller
         return view('hr.indexAttendance')->with('employees',$employees)->with('date',$date);
       }
       else{
+        $empIds = array();
         foreach($attendances as $attendance){
-          $id = $attendance->id;
+          $empIds[] = $attendance->atd_ids;
         }
-        $attendance = Attendance::find($id);
-        $array = json_decode($attendance->atd_ids,true);
-        $attendees = $array['employees'];
+
         // dd($attendees);
         $employees = Employee::where('emp_deletedAt',NULL)->orderBy('id','asc')->paginate(10);//ini buat pagination
-        return view('hr.editAttendance')->with('attendees',$attendees)->with('employees',$employees);
+        return view('hr.editAttendance')->with('empIds',$empIds)->with('employees',$employees)->with('attendances',$attendances);
+
+        // foreach($attendances as $attendance){
+        //   $id = $attendance->id;
+        //
+        // }
+        // $attendance = Attendance::find($id);
+        // $array = json_decode($attendance->atd_ids,true);
+        // $attendees = $array['employees'];
+        // // dd($attendees);
+        // $employees = Employee::where('emp_deletedAt',NULL)->orderBy('id','asc')->paginate(10);//ini buat pagination
+        // return view('hr.editAttendance')->with('attendees',$attendees)->with('employees',$employees);
       }
 
     }
@@ -64,14 +78,59 @@ class AttendanceController extends Controller
       return view('hr.editAttendance')->with('employees',$employees);
     }
     public function store(Request $request){
-      $attendance = new Attendance;
+
       $date = date('Y-m-d');
 
-      $oldAtdCart = Session::get('atdCart');
-      $atdCart = new AtdCart($oldAtdCart);
-      $attendance->atd_date = $date;
-      $attendance->atd_ids = json_encode($atdCart);
-      $attendance->save();
-      Session::forget('atdCart');
+      $array = array();
+      $idArray = array();
+      $array = $request->input('emp_type');
+
+      $employees = Employee::where('emp_deletedAt',NULL)->get();
+      foreach($employees as $employee){
+        $idArray[] = $employee->id;
+      }
+
+      for($x=0;$x<sizeof($array);$x++){
+
+        if($array[$x] == 1){
+          $attendance = new Attendance;
+          $attendance->atd_date = $date;
+          $attendance->atd_ids = $idArray[$x];
+          $attendance->save();
+        }
+
+
+      }
+
+      return redirect('attendance')->with('success','Data Absensi berhasil di submit');
+      // $oldAtdCart = Session::get('atdCart');
+      // $atdCart = new AtdCart($oldAtdCart);
+      // $attendance->atd_date = $date;
+      // $attendance->atd_ids = json_encode($atdCart);
+      // $attendance->save();
+      // Session::forget('atdCart');
+    }
+
+    public function update(Request $request)
+    {
+      $date = date('Y-m-d');
+
+      $array = array();
+      $idArray = array();
+      $array = $request->input('emp_type');
+      $idArray = $request->input('idArray');
+
+
+      for($x=0;$x<sizeof($array);$x++){
+
+        if($array[$x] == 1){
+          $attendance = new Attendance;
+          $attendance->atd_date = $date;
+          $attendance->atd_ids = $idArray[$x];
+          $attendance->save();
+        }
+
+      }
+      return redirect('attendance')->with('success','Data Absensi berhasil di submit');
     }
 }

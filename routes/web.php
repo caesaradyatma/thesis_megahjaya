@@ -51,6 +51,8 @@ Route::get('attendance/test','AttendanceController@getEmpCart');
 
 Route::post('attendance/submit','AttendanceController@store');
 
+Route::post('attendance/update','AttendanceController@update');
+
 Route::get('invoices/','InvoicesController@index');
 
 Route::get('invoices/create','InvoicesController@cartForm');
@@ -76,3 +78,7 @@ Route::get('invoices/getCart/deleteCart', 'InvoicesController@destroyCart');
 Route::post('invoices/editCart', 'InvoicesController@editCart');
 
 Route::post('invoices/searchInvoice','InvoicesController@searchInvoice');
+
+Route::get('payroll/','PayrollController@index');
+
+Route::get('payroll/calculate','PayrollController@create');

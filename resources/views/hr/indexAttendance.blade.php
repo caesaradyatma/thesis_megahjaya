@@ -21,8 +21,9 @@
           <td>{{$employee->emp_name}}</td>
           <td>{{$employee->emp_type}}</td>
           <td>{{$employee->emp_contact}}</td>
-          <td><a href='attendance/attend/{{$employee->id}}'class='btn btn-primary'>Hadir</a></td>
-          {{-- <td>{{Form::select('emp_type[]',[1=>'Hadir',2=>'Tidak Hadir'],'',['class'=>'form-control'])}}</td> --}}
+          {{-- <td><a href='attendance/attend/{{$employee->id}}'class='btn btn-primary'>Absen</a></td> --}}
+          <td>{{Form::select('emp_type[]',[1=>'Hadir',2=>'Tidak Hadir'],'',['class'=>'form-control'])}}</td>
+          {{Form::hidden('idArrray',$employee->id)}}
         </tr>
       @endforeach
     </table>
