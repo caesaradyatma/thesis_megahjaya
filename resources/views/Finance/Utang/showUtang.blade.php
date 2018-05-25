@@ -33,16 +33,16 @@
       </td>
       <td>
         <p>
-          {{$outcome->out_name}}
+          {{$utang->utg_name}}
         </p>
       </td>
       <td>
         <p>
-          {{$outcome->out_desc}}
+          {{$utang->utg_desc}}
         </p>
       </td>
       <td>
-        <p>{{number_format($outcome->out_amount)}}</p>
+        <p>{{number_format($utang->utg_amount)}}</p>
       </td>
       <td>
         <p>{{$utang->utg_duedate}}</p>

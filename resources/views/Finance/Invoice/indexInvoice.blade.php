@@ -31,11 +31,18 @@
               {{Form::text('cst_company','',['class'=>'form-control','placeholder'=>'Nama Perusahaan'])}}
             </div>
             <div class="form-group">
-              {{Form::label('inv_date', 'Tanggal Transaksi')}}
-              {{-- {{Form::date('inv_date','',['class'=>'form-control','placeholder'=>'Tanggal Invoice'])}} --}}
+              <table class="table">
+                <tr>
+                  <th>{{Form::label('inv_date', 'Tanggal Transaksi')}}</th>
+                  <td>{{Form::number('inv_day','',['min'=>'1','max'=>'31','placeholder'=>'Hari','class'=>'form-control'])}}</td>
+                  <td>{{Form::number('inv_month','',['min'=>'1','max'=>'12','placeholder'=>'Bulan','class'=>'form-control'])}}</td>
+                  <td>{{Form::number('inv_year','',['min'=>'2017','placeholder'=>'Tahun','class'=>'form-control'])}}</td>
+                </tr>
+              </table>
+              {{-- {{Form::label('inv_date', 'Tanggal Transaksi')}}
               {{Form::number('inv_day','',['min'=>'1','max'=>'31'])}}
               {{Form::number('inv_month','',['min'=>'1','max'=>'12','placeholder'=>'Bulan'])}}
-              {{Form::number('inv_year','',['min'=>'2017','placeholder'=>'Tahun'])}}
+              {{Form::number('inv_year','',['min'=>'2017','placeholder'=>'Tahun'])}} --}}
             </div>
             {{Form::hidden('_method','POST')}}
             {{Form::submit('Submit',['class'=>'btn btn-primary form-control'])}}
@@ -66,7 +73,7 @@
         <th>Nama Pelanggan</th>
         <th>Jumlah Transaksi</th>
         <th>Jenis Transaksi</th>
-        <th>Status</th>
+        {{-- <th>Status</th> --}}
         <th>Lihat Detail</th>
         {{-- <th>Barang Yang dibeli</th> --}}
       </tr>
@@ -75,9 +82,55 @@
           <td>{{$cst_name->inv_id}}</td>
           <td>{{$cst_name->inv_date}}</td>
           <td>{{$cst_name->cst_name}}</td>
-          <td>{{$cst_name->inv_totPrice}}</td>
-          <td>{{$cst_name->inv_type}}</td>
-          <td>{{$cst_name->inv_status}}</td>
+          <td>{{number_format($cst_name->inv_totPrice)}}</td>
+          <td>
+            <?php
+              if($cst_name->inv_type == 1){
+                echo "Tunai";
+
+              }
+              else if($cst_name->inv_type == 2){
+                echo "Tunai & Diantar";
+              }
+              else if($cst_name->inv_type == 3){
+                echo "Utang";
+              }
+              else if($cst_name->inv_type == 4){
+                echo "Utang & Diantar";
+              }
+             ?>
+          </td>
+          <td>
+            <?php
+
+              foreach($piutangs as $piutang){
+                if($cst_name->inv_type == 1){
+                  echo "<p style='background-color:green;color:white;'>Lunas</p>";
+                  break 1;
+                }
+                if($piutang->piut_id == $cst_name->piut_id){
+                  $status = $piutang->piut_status;
+                  if($status == 1){
+                    echo "<p style='background-color:green;color:white;'>Lunas</p>";
+                    break 1;
+                  }
+                  else if($status == 0){
+                    echo "Menunggu Pembayaran";
+                  }
+                }
+                // else {
+                //   echo "Lunas";
+                // }
+
+              }
+              // if($cst_name->inv_status == 1){
+              //   echo "Lunas";
+              // }
+              // else if($cst_name->inv_status == 0){
+              //   echo "Menunggu Pembayaran";
+              // }
+             ?>
+          </td>
           {{-- <td>{{$invoice->inv_products}}</td> --}}
           <td><a href="invoices/detail/{{$cst_name->inv_id}}" class="btn btn-primary">Detail</a></td>
         </tr>

@@ -8,7 +8,7 @@ use App\Inventorylist;
 use App\Invoice;
 use App\Customer;
 use App\Cart;
-
+use App\Piutang;
 
 use Session;
 
@@ -34,12 +34,12 @@ class InvoicesController extends Controller
         //   $cst_id[] = $product->
         //
         // }
-
+        $piutangs = Piutang::where('piut_deletedAt',NULL)->get();
         $cst_names = DB::table('invoices')
           ->leftJoin('customers','invoices.cst_id','=','customers.id')
           ->select('invoices.*','customers.cst_name')
           ->get();
-        return view('finance.Invoice.indexInvoice')->with('invoices',$invoices)->with('cst_names',$cst_names);
+        return view('finance.Invoice.indexInvoice')->with('invoices',$invoices)->with('cst_names',$cst_names)->with('piutangs',$piutangs);
 
     }
 
@@ -64,7 +64,7 @@ class InvoicesController extends Controller
       {
         $idArray[] = $product->id;
       }
-      return view('finance.invoice.pickProduct')->with('products',$products)->with('idArray',$idArray);
+      return view('finance.Invoice.pickProduct')->with('products',$products)->with('idArray',$idArray);
     }
 
     public function createCart(Request $request)
@@ -105,7 +105,7 @@ class InvoicesController extends Controller
         $cart = new Cart($oldCart);
         $totPrice = $cart->totPrice;
         $products = $cart->items;
-        return view('Finance.Invoice.createInvoice')->with('products',$products)->with('totPrice',$totPrice);
+        return view('finance.Invoice.createInvoice')->with('products',$products)->with('totPrice',$totPrice);
     }
 
     public function editCart(Request $request)
@@ -156,19 +156,30 @@ class InvoicesController extends Controller
           $invoice->inv_totPrice = $request->input('inv_totPrice');
           $invoice->inv_type = $request->input('inv_type');
           $inv_type = $request->input('inv_type');
-          if($inv_type == 0){
-            $invoice->inv_status=0;
-          }
-          else{
+          if($inv_type == 1){
             $invoice->inv_status=1;
           }
+          else if($inv_type == 3){
+            $invoice->inv_status=0;
+            $piutang = new Piutang;
+            $piutang->piut_name = $cst_name;
+            $piutang->piut_amount = $request->input('inv_totPrice');
+            $piutang->piut_desc = "Piutang penjualan";
+            $duedate=Date('Y-m-d', strtotime("+30 days"));
+            $piutang->piut_duedate =  $duedate;
+            $piutang->save();
+            $piutang = Piutang::where('piut_name',$cst_name)->orderBy('piut_id','desc')->first();
+            $piut_id = $piutang->piut_id;
+            $invoice->piut_id = $piut_id;
+          }
+
           $invoice->cst_id = $cst_id;
           $invoice->inv_products = json_encode($cart);
           $invoice->save();
           Session::forget('cart');
 
           $invoices = Invoice::where('deleted_at',NULL)->paginate(10);
-          return redirect('index')->with('success','Invoice berhasil dibuat');
+          return redirect('invoices/')->with('success','Invoice berhasil dibuat');
           // $cst_names = DB::table('invoices')
           //   ->leftJoin('customers','invoices.cst_id','=','customers.id')
           //   ->select('invoices.*','customers.cst_name')
@@ -192,19 +203,28 @@ class InvoicesController extends Controller
           $invoice->inv_type = $request->input('inv_type');
           $inv_type = $request->input('inv_type');
           $invoice->cst_id = $custID;
-          if($inv_type == 0){
-            $invoice->inv_status=0;
-          }
-          else{
+          if($inv_type == 1){
             $invoice->inv_status=1;
           }
-
+          else if($inv_type == 3){
+            $invoice->inv_status=0;
+            $piutang = new Piutang;
+            $piutang->piut_name = $cst_name;
+            $piutang->piut_amount = $request->input('inv_totPrice');
+            $piutang->piut_desc = "Piutang penjualan";
+            $duedate=Date('Y-m-d', strtotime("+30 days"));
+            $piutang->piut_duedate =  $duedate;
+            $piutang->save();
+            $piutang = Piutang::where('piut_name',$cst_name)->orderBy('piut_id','desc')->first();
+            $piut_id = $piutang->piut_id;
+            $invoice->piut_id = $piut_id;
+          }
           $invoice->inv_products = json_encode($cart);
           $invoice->save();
           Session::forget('cart');
 
           $invoices = Invoice::where('deleted_at',NULL)->paginate(10);
-          return redirect('index')->with('success','Invoice berhasil dibuat');
+          return redirect('invoices')->with('success','Invoice berhasil dibuat');
           // $cst_names = DB::table('invoices')
           //   ->leftJoin('customers','invoices.cst_id','=','customers.id')
           //   ->select('invoices.*','customers.cst_name')
@@ -226,7 +246,7 @@ class InvoicesController extends Controller
         $idArray[] = $product->id;
       }
 
-      return view('finance.invoice.searchResult')->with('products',$products)->with('idArray',$idArray);
+      return view('finance.Invoice.searchResult')->with('products',$products)->with('idArray',$idArray);
     }
 
     public function searchInvoice(Request $request)
@@ -237,7 +257,7 @@ class InvoicesController extends Controller
       $inv_day = $request->input('inv_day');
       $inv_month = $request->input('inv_month');
       $inv_year = $request->input('inv_year');
-
+      $piutangs = Piutang::where('piut_deletedAt',NULL)->get();
       if($inv_id == NULL && $cst_name == NULL && $cst_company == NULL && $inv_day == NULL && $inv_month == NULL && $inv_year == NULL){
         return redirect('invoices')->with('error','Form pencarian kosong');
       }
@@ -261,7 +281,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
         }
 
@@ -292,7 +312,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
         }
 
@@ -324,7 +344,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
         }
 
@@ -350,7 +370,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
         }
 
@@ -381,7 +401,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
         }
 
@@ -412,7 +432,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
         }
       }//end tahun sama bulan isi
@@ -436,7 +456,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
         }
 
@@ -469,7 +489,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
         }
 
@@ -500,7 +520,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
 
         }
@@ -525,7 +545,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
         }
 
@@ -557,7 +577,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
         }
 
@@ -588,7 +608,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
 
         }
@@ -613,7 +633,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
         }
 
@@ -646,7 +666,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
         }
 
@@ -677,7 +697,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
 
         }
@@ -688,7 +708,7 @@ class InvoicesController extends Controller
         $oldformat2 = strtotime('2030-12-31');
         $date1 = date('Y-m-d',$oldformat1);
         $date2 = date('Y-m-d',$oldformat2);
-
+        $piutangs = Piutang::where('piut_deletedAt',NULL)->get();
         if($inv_id!=NULL){//if id ada isinya
           $invoices = Invoice::where('inv_id',$inv_id)
             ->get();
@@ -702,7 +722,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
         }
 
@@ -735,7 +755,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
         }
 
@@ -766,7 +786,7 @@ class InvoicesController extends Controller
               ->select('invoices.*','customers.cst_name')
               ->get();
 
-            return view('finance.invoice.indexInvoice')->with('cst_names',$joins);
+            return view('finance.Invoice.indexInvoice')->with('cst_names',$joins)->with('piutangs',$piutangs);
           }
 
         }
@@ -798,7 +818,7 @@ class InvoicesController extends Controller
           //   echo $product['item']['item_name'];
           //   echo $product['order_quantity'];
           // }
-          return view('finance.invoice.showInvoice')->with('products',$products)->with('totPrice',$totPrice)->with('inv_id',$inv_id);
+          return view('finance.Invoice.showInvoice')->with('products',$products)->with('totPrice',$totPrice)->with('inv_id',$inv_id)->with('invoice',$invoice);
         }
         else{
 

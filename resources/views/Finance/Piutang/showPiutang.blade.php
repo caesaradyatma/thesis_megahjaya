@@ -33,16 +33,16 @@
       </td>
       <td>
         <p>
-          {{$income->in_name}}
+          {{$piutang->piut_name}}
         </p>
       </td>
       <td>
         <p>
-          {{$income->in_desc}}
+          {{$piutang->piut_desc}}
         </p>
       </td>
       <td>
-        <p>{{number_format($income->in_amount)}}</p>
+        <p>{{number_format($piutang->piut_amount)}}</p>
       </td>
       <td>
         <p>{{$piutang->piut_duedate}}</p>

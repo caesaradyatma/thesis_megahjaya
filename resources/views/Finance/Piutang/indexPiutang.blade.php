@@ -30,10 +30,10 @@
             @endif
           </td>
           <td>
-            <p>{{$piutang->in_name}}</p>
+            <p>{{$piutang->piut_desc}}</p>
           </td>
           <td>
-            <p>{{number_format($piutang->in_amount)}}</p>
+            <p>{{number_format($piutang->piut_amount)}}</p>
           </td>
           <td>
             <p>{{$piutang->piut_duedate}}</p>

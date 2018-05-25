@@ -30,10 +30,10 @@
             @endif
           </td>
           <td>
-            <p>{{$utang->out_name}}</p>
+            <p>{{$utang->utg_name}}</p>
           </td>
           <td>
-            <p>{{number_format($utang->out_amount)}}</p>
+            <p>{{number_format($utang->utg_amount)}}</p>
           </td>
           <td>
             <p>{{$utang->utg_duedate}}</p>

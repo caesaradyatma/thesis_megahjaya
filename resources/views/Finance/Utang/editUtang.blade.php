@@ -5,16 +5,16 @@
 @section('content')
   {!! Form::open(['action' => ['UtangsController@update',$utang->utg_id], 'method' => 'POST']) !!}
     <div class="form-group">
-      {{Form::label('out_name', 'Nama')}}
-      {{Form::text('out_name',$outcome->out_name,['class'=>'form-control','placeholder'=>'Nama Kreditur'])}}
+      {{Form::label('utg_name', 'Nama')}}
+      {{Form::text('utg_name',$utang->utg_name,['class'=>'form-control','placeholder'=>'Nama Kreditur'])}}
     </div>
     <div class="form-group">
-      {{Form::label('out_amount', 'Jumlah')}}
-      {{Form::number('out_amount',$outcome->out_amount,['class'=>'form-control','placeholder'=>'Jumlah Utang','min'=>'1'])}}
+      {{Form::label('utg_amount', 'Jumlah')}}
+      {{Form::number('utg_amount',$utang->utg_amount,['class'=>'form-control','placeholder'=>'Jumlah Utang','min'=>'1'])}}
     </div>
     <div class="form-group">
-      {{Form::label('out_desc', 'Keterangan')}}
-      {{Form::textarea('out_desc',$outcome->out_desc,['class'=>'form-control'])}}
+      {{Form::label('utg_desc', 'Keterangan')}}
+      {{Form::textarea('utg_desc',$utang->utg_desc,['class'=>'form-control'])}}
     </div>
     <div class="form-group">
       {{Form::label('utg_duedate', 'Tanggal Jatuh Tempo')}}

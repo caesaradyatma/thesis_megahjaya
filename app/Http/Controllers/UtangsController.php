@@ -21,17 +21,14 @@ class UtangsController extends Controller
     }
     public function index()
     {
-        // $outcomes = Outcome::where('out_type',1)->orderBy('created_at','desc')->paginate(10);//ini buat pagination
-        // $utangs = Utang::where('utg_deleteStat',0)->orderBy('created_at','asc')->paginate(10);
-        // return view('finance.indexUtang')->with('utangs',$utangs)->with('outcomes',$outcomes);
-        //$utangs = Outcome::find(6)->utang;
 
-        $utangs = DB::table('utangs')
-          ->join('outcomes','utangs.utg_id','=','outcomes.utg_id')
-          ->select('utangs.*','outcomes.out_name','outcomes.out_amount')
-          ->where('utg_deletedAt',NULL)
-          ->paginate(10);
-        // $utangs = Utang::find();
+        // $utangs = DB::table('utangs')
+        //   ->join('outcomes','utangs.utg_id','=','outcomes.utg_id')
+        //   ->select('utangs.*','outcomes.out_name','outcomes.out_amount')
+        //   ->where('utg_deletedAt',NULL)
+        //   ->paginate(10);
+
+        $utangs = Utang::where('utg_deletedAt',NULL)->paginate(10);
         return view('finance.Utang.indexUtang')->with('utangs',$utangs);
 
     }
@@ -58,32 +55,35 @@ class UtangsController extends Controller
     {
         //
         $this->validate($request,[
-          'out_name' => 'required',
-          'out_amount' => 'required',
+          'utg_name' => 'required',
+          'utg_amount' => 'required',
           'utg_duedate' => 'required',
-          'out_desc' => 'required'
+          'utg_desc' => 'required'
         ]);
         //utang
         $utang = new Utang;
         $utang->user_id = auth()->user()->id;
         $utang->utg_duedate = $request->input('utg_duedate');
+        $utang->utg_name = $request->input('utg_name');
+        $utang->utg_amount = $request->input('utg_amount');
+        $utang->utg_desc = $request->input('utg_desc');
         $utang->save();
 
         //get utang id
-        $utang2 = Utang::orderBy('utg_id','desc')->first();
-        $lastUtg_id = $utang2->utg_id;
+        // $utang2 = Utang::orderBy('utg_id','desc')->first();
+        // $lastUtg_id = $utang2->utg_id;
 
         //Create Outcome
-        $outcome = new Outcome;
-        $outcome->out_type = 1;
-        $outcome->out_name = $request->input('out_name');
-        $outcome->out_amount = $request->input('out_amount');
-        $outcome->out_date = $request->input('utg_duedate');
-        $outcome->user_id = auth()->user()->id;
-        $outcome->out_desc = $request->input('out_desc');
-        $outcome->out_deleteStat = 0;
-        $outcome->utg_id = $lastUtg_id;
-        $outcome->save();
+        // $outcome = new Outcome;
+        // $outcome->out_type = 1;
+        // $outcome->out_name = $request->input('out_name');
+        // $outcome->out_amount = $request->input('out_amount');
+        // $outcome->out_date = $request->input('utg_duedate');
+        // $outcome->user_id = auth()->user()->id;
+        // $outcome->out_desc = $request->input('out_desc');
+        // $outcome->out_deleteStat = 0;
+        // $outcome->utg_id = $lastUtg_id;
+        // $outcome->save();
 
         return redirect('/utangs')->with('success', 'Data Hutang Berhasil Dibuat');
     }
@@ -100,23 +100,15 @@ class UtangsController extends Controller
         $utang = Utang::find($utg_id);
 
         if($utang != NULL){
-          $outcome = DB::table('outcomes')->where('utg_id',$utg_id)->first();
-          // echo $outcome->out_name;
-          // echo $utang->outcome->out_name;
-          //validation
-          // $delStat1 = $utang->utg_deleteStat;
-          // $delStat2 = $outcome->out_deleteStat;
-          // if($delStat1 == 1 && $delStat2 == 1){
-          //   return redirect('/utangs')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
-          // }
+          // $outcome = DB::table('outcomes')->where('utg_id',$utg_id)->first();
 
           $delDate1 = $utang->utg_deletedAt;
-          $delDate2 = $outcome->out_deletedAt;
-          if($delDate1 != NULL && $delDate2 != NULL){
+          // $delDate2 = $outcome->out_deletedAt;
+          if($delDate1 != NULL){
             return redirect('/utangs')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
           }
           else{
-            return view('finance.Utang.showUtang')->with('utang', $utang)->with('outcome',$outcome);
+            return view('finance.Utang.showUtang')->with('utang', $utang);
           }
         }
         else{
@@ -136,23 +128,15 @@ class UtangsController extends Controller
         $utang = Utang::find($utg_id);
 
         if($utang != NULL){
-          $outcome = DB::table('outcomes')->where('utg_id',$utg_id)->first();
-          //validation
-          // $delStat1 = $utang->utg_deleteStat;
-          // $delStat2 = $outcome->out_deleteStat;
-          // if($delStat1 == 1 && $delStat2 == 1){
-          //   return redirect('/utangs')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
-          // }
-          //
-          // return view('finance.Utang.editUtang')->with('utang',$utang)->with('outcome',$outcome);
+          // $outcome = DB::table('outcomes')->where('utg_id',$utg_id)->first();
 
           $delDate1 = $utang->utg_deletedAt;
-          $delDate2 = $outcome->out_deletedAt;
-          if($delDate1 != NULL && $delDate2 != NULL){
+          // $delDate2 = $outcome->out_deletedAt;
+          if($delDate1 != NULL){
             return redirect('/utangs')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
           }
           else{
-            return view('finance.Utang.showUtang')->with('utang', $utang)->with('outcome',$outcome);
+            return view('finance.Utang.editUtang')->with('utang', $utang);
           }
         }
         else{
@@ -171,8 +155,8 @@ class UtangsController extends Controller
     {
         //
         $this->validate($request,[
-          'out_name' => 'required',
-          'out_amount' => 'required',
+          'utg_name' => 'required',
+          'utg_amount' => 'required',
           'utg_duedate' => 'required',
 
         ]);
@@ -182,18 +166,21 @@ class UtangsController extends Controller
         $utang->utg_paiddate = $request->input('utg_paiddate');
         $utang->utg_payer = $request->input('utg_payer');
         $utang->utg_status = $request->input('utg_status');
+        $utang->utg_name = $request->input('utg_name');
+        $utang->utg_amount = $request->input('utg_amount');
+        $utang->utg_desc = $request->input('utg_desc');
         $utang->save();
 
-        $out_obj = DB::table('outcomes')->where('utg_id',$utg_id)->first();
-        $out_id = $out_obj->out_id;
-
-        $outcome = Outcome::find($out_id);
-        $outcome->out_name = $request->input('out_name');
-        $outcome->out_amount = $request->input('out_amount');
-        $outcome->out_date = $request->input('utg_duedate');
-        $outcome->out_desc = $request->input('out_desc');
-        $outcome->user_id = auth()->user()->id;
-        $outcome->save();
+        // $out_obj = DB::table('outcomes')->where('utg_id',$utg_id)->first();
+        // $out_id = $out_obj->out_id;
+        //
+        // $outcome = Outcome::find($out_id);
+        // $outcome->out_name = $request->input('out_name');
+        // $outcome->out_amount = $request->input('out_amount');
+        // $outcome->out_date = $request->input('utg_duedate');
+        // $outcome->out_desc = $request->input('out_desc');
+        // $outcome->user_id = auth()->user()->id;
+        // $outcome->save();
 
         return redirect('/utangs')->with('success', 'Data Utang Berhasil Diupdate');
 
@@ -215,20 +202,19 @@ class UtangsController extends Controller
         //temp deletion
         $date = date('Y-m-d H:i:s');
         $utang= Utang::find($utg_id);
-        $utang->utg_deleteStat = 1;
         $utang->utg_deletedAt = $date;
         $utang->save();
 
         //get out_id
-        $outcome_obj = DB::table('outcomes')->where('utg_id',$utg_id)->first();
-        $out_id = $outcome_obj->out_id;
+        // $outcome_obj = DB::table('outcomes')->where('utg_id',$utg_id)->first();
+        // $out_id = $outcome_obj->out_id;
 
         //delete from outcome table
-        $outcome = Outcome::find($out_id);
-        $outcome->user_id = auth()->user()->id;
-        $outcome->out_deleteStat = 1;
-        $outcome->out_deletedAt = $date;
-        $outcome->save();
+        // $outcome = Outcome::find($out_id);
+        // $outcome->user_id = auth()->user()->id;
+        // $outcome->out_deleteStat = 1;
+        // $outcome->out_deletedAt = $date;
+        // $outcome->save();
         return redirect('/utangs')->with('success', 'Data Utang Telah Dihapus');
     }
 }

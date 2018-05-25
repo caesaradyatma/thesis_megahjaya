@@ -63,7 +63,7 @@
             {{-- <td><a href="{{url('invoices/editCart/'.$product['item']['id'])}}">Ubah Jumlah Pesanan</td> --}}
             <td>
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                Launch demo modal
+                Edit Jumlah Pesanan
               </button>
             </td>
           </tr>
@@ -107,8 +107,24 @@
         {{Form::label('inv_type', 'Jenis Transaksi')}}
         {{Form::select('inv_type',[1=>'Lunas',2=>'Diantar',3=>'Utang'],'',['class'=>'form-control'])}}
       </div>
+      <div class="form-group">
+        <label for="Products"></label>
+        <input type="text" class="form-control" id="wek" placeholder="Products">
+
+      </div>
+      <button id="btn1">Append form</button>
       {{Form::hidden('_method','POST')}}
       {{Form::submit('Submit',['class'=>'btn btn-primary form-control'])}}
     {!! Form::close() !!}
   </div>
+@endsection
+@section('scripts')
+  <script>
+    $(document).ready(function(){
+      $("#btn1").click(function(){
+          $("#wek").append("<input type='text' class='form-control' id='wex' placeholder='Products'>");
+      });
+    });
+  </script>
+
 @endsection

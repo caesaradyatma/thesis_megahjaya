@@ -20,7 +20,7 @@ class IncomeStatementController extends Controller
     public function index()
     {
         //
-        return view('finance.report.indexIncomeStatement');
+        return view('finance.Report.IndexIncomeStatement');
     }
 
     /**

@@ -22,12 +22,13 @@ class PiutangsController extends Controller
     public function index()
     {
         //
-        $piutangs = DB::table('piutangs')
-          ->join('incomes','piutangs.piut_id','=','incomes.piut_id')
-          ->select('piutangs.*','incomes.in_name','incomes.in_amount','incomes.in_desc')
-          ->where('piut_deletedAt',NULL)
-          ->paginate(10);
-        // $utangs = Utang::find();
+        $piutangs = Piutang::where('piut_deletedAt',NULL)->paginate(10);
+        // $piutangs = DB::table('piutangs')
+        //   ->join('incomes','piutangs.piut_id','=','incomes.piut_id')
+        //   ->select('piutangs.*','incomes.in_name','incomes.in_amount','incomes.in_desc')
+        //   ->where('piut_deletedAt',NULL)
+        //   ->paginate(10);
+
         return view('finance.Piutang.indexPiutang')->with('piutangs',$piutangs);
     }
 
@@ -52,32 +53,34 @@ class PiutangsController extends Controller
     {
         //
         $this->validate($request,[
-          'in_name' => 'required',
-          'in_amount' => 'required',
+          'piut_name' => 'required',
+          'piut_amount' => 'required',
           'piut_duedate' => 'required',
-          'in_desc' => 'required'
+          'piut_desc' => 'required'
         ]);
         //piutang
         $piutang = new Piutang;
         $piutang->user_id = auth()->user()->id;
         $piutang->piut_duedate = $request->input('piut_duedate');
+        $piutang->piut_name = $request->input('piut_name');
+        $piutang->piut_amount = $request->input('piut_amount');
+        $piutang->piut_desc = $request->input('piut_desc');
         $piutang->save();
 
         //get latest piutang id
-        $piutang2 = Piutang::orderBy('piut_id','desc')->first();
-        $lastPiut_id = $piutang2->piut_id;
+        // $piutang2 = Piutang::orderBy('piut_id','desc')->first();
+        // $lastPiut_id = $piutang2->piut_id;
 
         //Create income
-        $income = new Income;
-        $income->in_type = 1;
-        $income->in_name = $request->input('in_name');
-        $income->in_amount = $request->input('in_amount');
-        $income->in_date = $request->input('piut_duedate');
-        $income->user_id = auth()->user()->id;
-        $income->in_desc = $request->input('in_desc');
-        //$income->in_deleteStat = 0;
-        $income->piut_id = $lastPiut_id;
-        $income->save();
+        // $income = new Income;
+        // $income->in_type = 1;
+        // $income->in_name = $request->input('in_name');
+        // $income->in_amount = $request->input('in_amount');
+        // $income->in_date = $request->input('piut_duedate');
+        // $income->user_id = auth()->user()->id;
+        // $income->in_desc = $request->input('in_desc');
+        // $income->piut_id = $lastPiut_id;
+        // $income->save();
 
         return redirect('/piutangs')->with('success', 'Data Piutang Berhasil Dibuat');
     }
@@ -93,7 +96,8 @@ class PiutangsController extends Controller
         //
         $piutang = Piutang::find($piut_id);
         if($piutang != NULL){//if data exist
-          $income = DB::table('incomes')->where('piut_id',$piut_id)->first();
+          // $income = DB::table('incomes')->where('piut_id',$piut_id)->first();
+
           // echo $outcome->out_name;
           // echo $utang->outcome->out_name;
           //validation
@@ -104,12 +108,12 @@ class PiutangsController extends Controller
           // }
 
           $delDate1 = $piutang->piut_deletedAt;
-          $delDate2 = $income->in_deletedAt;
-          if($delDate1 != NULL && $delDate2 != NULL){
+          // $delDate2 = $income->in_deletedAt;
+          if($delDate1 != NULL){
             return redirect('/piutangs')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
           }
           else{
-            return view('finance.Piutang.showPiutang')->with('piutang', $piutang)->with('income',$income);
+            return view('finance.Piutang.showPiutang')->with('piutang', $piutang);
           }
 
         }
@@ -130,7 +134,9 @@ class PiutangsController extends Controller
         $piutang = Piutang::find($piut_id);
 
         if($piutang != NULL){//if data exist
-          $income = DB::table('incomes')->where('piut_id',$piut_id)->first();
+
+          // $income = DB::table('incomes')->where('piut_id',$piut_id)->first();
+
           //Validation
           // $delStat1 = $piutang->piut_deleteStat;
           // $delStat2 = $income->in_deleteStat;
@@ -139,12 +145,12 @@ class PiutangsController extends Controller
           // }
 
           $delDate1 = $piutang->piut_deletedAt;
-          $delDate2 = $income->in_deletedAt;
-          if($delDate1 != NULL && $delDate2 != NULL){//if data is deleted
+          // $delDate2 = $income->in_deletedAt;
+          if($delDate1 != NULL){//if data is deleted
             return redirect('/piutangs')->with('error', 'Data Yang Ingin Anda Akses Sudah Dihapus');
           }
           else{
-            return view('finance.Piutang.editPiutang')->with('piutang',$piutang)->with('income',$income);
+            return view('finance.Piutang.editPiutang')->with('piutang',$piutang);
           }
         }
         else{
@@ -163,8 +169,8 @@ class PiutangsController extends Controller
     {
         //
         $this->validate($request,[
-          'in_name' => 'required',
-          'in_amount' => 'required',
+          'piut_name' => 'required',
+          'piut_amount' => 'required',
           'piut_duedate' => 'required',
 
         ]);
@@ -174,18 +180,21 @@ class PiutangsController extends Controller
         $piutang->piut_paiddate = $request->input('piut_paiddate');
         $piutang->piut_payer = $request->input('piut_payer');
         $piutang->piut_status = $request->input('piut_status');
+        $piutang->piut_name = $request->input('piut_name');
+        $piutang->piut_desc = $request->input('piut_desc');
+        $piutang->piut_amount = $request->input('piut_amount');
         $piutang->save();
 
-        $in_obj = DB::table('incomes')->where('piut_id',$piut_id)->first();
-        $in_id = $in_obj->in_id;
-
-        $income = Income::find($in_id);
-        $income->in_name = $request->input('in_name');
-        $income->in_amount = $request->input('in_amount');
-        $income->in_date = $request->input('piut_duedate');
-        $income->in_desc = $request->input('in_desc');
-        $income->user_id = auth()->user()->id;
-        $income->save();
+        // $in_obj = DB::table('incomes')->where('piut_id',$piut_id)->first();
+        // $in_id = $in_obj->in_id;
+        //
+        // $income = Income::find($in_id);
+        // $income->in_name = $request->input('in_name');
+        // $income->in_amount = $request->input('in_amount');
+        // $income->in_date = $request->input('piut_duedate');
+        // $income->in_desc = $request->input('in_desc');
+        // $income->user_id = auth()->user()->id;
+        // $income->save();
 
         return redirect('/piutangs')->with('success', 'Data Piutang Berhasil Diupdate');
     }
@@ -205,22 +214,21 @@ class PiutangsController extends Controller
         //$income->delete();
 
         //temp deletion
-        $date = date('Y-m-d H:i:s');
+        $date = date('Y-m-d');
         $piutang= Piutang::find($piut_id);
-        $piutang->piut_deleteStat = 1;
         $piutang->piut_deletedAt = $date;
         $piutang->save();
 
         //get out_id
-        $income_obj = DB::table('incomes')->where('piut_id',$piut_id)->first();
-        $in_id = $income_obj->in_id;
+        // $income_obj = DB::table('incomes')->where('piut_id',$piut_id)->first();
+        // $in_id = $income_obj->in_id;
 
         //delete from outcome table
-        $income = Income::find($in_id);
-        $income->user_id = auth()->user()->id;
-        $income->in_deleteStat = 1;
-        $income->in_deletedAt = $date;
-        $income->save();
+        // $income = Income::find($in_id);
+        // $income->user_id = auth()->user()->id;
+        // $income->in_deleteStat = 1;
+        // $income->in_deletedAt = $date;
+        // $income->save();
         return redirect('/incomes')->with('success', 'Data Piutang Telah Dihapus');
     }
 }

@@ -5,16 +5,16 @@
 @section('content')
   {!! Form::open(['action' => ['PiutangsController@update',$piutang->piut_id], 'method' => 'POST']) !!}
     <div class="form-group">
-      {{Form::label('in_name', 'Nama')}}
-      {{Form::text('in_name',$income->in_name,['class'=>'form-control','placeholder'=>'Nama Debittur'])}}
+      {{Form::label('piut_name', 'Nama')}}
+      {{Form::text('piut_name',$piutang->piut_name,['class'=>'form-control','placeholder'=>'Nama Debittur'])}}
     </div>
     <div class="form-group">
-      {{Form::label('in_amount', 'Jumlah')}}
-      {{Form::number('in_amount',$income->in_amount,['class'=>'form-control','placeholder'=>'Jumlah Piutang','min'=>'1'])}}
+      {{Form::label('piut_amount', 'Jumlah')}}
+      {{Form::number('piut_amount',$piutang->piut_amount,['class'=>'form-control','placeholder'=>'Jumlah Piutang','min'=>'1'])}}
     </div>
     <div class="form-group">
-      {{Form::label('in_desc', 'Keterangan')}}
-      {{Form::textarea('in_desc',$income->in_desc,['class'=>'form-control'])}}
+      {{Form::label('piut_desc', 'Keterangan')}}
+      {{Form::textarea('piut_desc',$piutang->piut_desc,['class'=>'form-control'])}}
     </div>
     <div class="form-group">
       {{Form::label('piut_duedate', 'Tanggal Jatuh Tempo')}}

@@ -72,16 +72,16 @@ class IncomesController extends Controller
         $income->user_id = auth()->user()->id;
         $income->in_desc = $request->input('in_desc');
 
-        if($in_type == 1){
-          $piutang = new Piutang;
-          $piutang->piut_duedate = $request->input('in_date');
-          $piutang->user_id = auth()->user()->id;
-          $piutang->save();
-
-          $piutang2 = Piutang::orderBy('piut_id','desc')->first();
-          $lastpiut_id = $piutang2->piut_id;
-          $income->piut_id = $lastpiut_id;
-        }
+        // if($in_type == 1){
+        //   $piutang = new Piutang;
+        //   $piutang->piut_duedate = $request->input('in_date');
+        //   $piutang->user_id = auth()->user()->id;
+        //   $piutang->save();
+        //
+        //   $piutang2 = Piutang::orderBy('piut_id','desc')->first();
+        //   $lastpiut_id = $piutang2->piut_id;
+        //   $income->piut_id = $lastpiut_id;
+        // }
 
 
         $income->save();
@@ -182,14 +182,14 @@ class IncomesController extends Controller
         $income->in_date = $request->input('in_date');
         $income->in_desc = $request->input('in_desc');
         $income->user_id = auth()->user()->id;
-        $piut_id = $income->piut_id;
-
-        if($income->in_type == 1){
-          $piutang = Piutang::find($piut_id);
-          $piutang->piut_duedate = $request->input('in_date');
-          $piutang->user_id = auth()->user()->id;
-          $piutang->save();
-        }
+        // $piut_id = $income->piut_id;
+        //
+        // if($income->in_type == 1){
+        //   $piutang = Piutang::find($piut_id);
+        //   $piutang->piut_duedate = $request->input('in_date');
+        //   $piutang->user_id = auth()->user()->id;
+        //   $piutang->save();
+        // }
         $income->save();
 
         return redirect('/incomes')->with('success', 'Data Pendapatan Berhasil Diupdate');
@@ -210,17 +210,17 @@ class IncomesController extends Controller
         //temp deletion
         $date = date('Y-m-d H:i:s');
         $income->user_id = auth()->user()->id;
-        $income->in_deleteStat = 1;
+        // $income->in_deleteStat = 1;
         $income->in_deletedAt = $date;
 
-        $piut_id = $income->piut_id;
-        if($income->in_type == 1){
-          $piutang = Piutang::find($piut_id);
-          $income->in_deleteStat = 1;
-          $income->in_deletedAt = $date;
-          $piutang->user_id = auth()->user()->id;
-          $piutang->save();
-        }
+        // $piut_id = $income->piut_id;
+        // if($income->in_type == 1){
+        //   $piutang = Piutang::find($piut_id);
+        //   $income->in_deleteStat = 1;
+        //   $income->in_deletedAt = $date;
+        //   $piutang->user_id = auth()->user()->id;
+        //   $piutang->save();
+        // }
         $income->save();
         return redirect('/incomes')->with('success', 'Data Pendapatan Telah Dihapus');
     }
