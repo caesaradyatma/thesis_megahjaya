@@ -82,3 +82,7 @@ Route::post('invoices/searchInvoice','InvoicesController@searchInvoice');
 Route::get('payroll/','PayrollController@index');
 
 Route::get('payroll/calculate','PayrollController@create');
+
+Route::get('payroll/setPayrollView','PayrollController@setPayrollView');
+
+Route::post('payroll/setPayroll','PayrollController@setPayroll');

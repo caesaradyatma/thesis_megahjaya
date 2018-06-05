@@ -4,12 +4,12 @@
 
 @section('content')
   <h2>Akumulasi Gaji</h2>
-  <small>Input periode gaji</small><br>
-  <a href='payroll/setPayrollView'>Setting Gaji</a>
-  {!! Form::open(['action' => 'PayrollController@create','method' => 'GET']) !!}
+  <small>Input periode gaji</small>
+  <a href='payroll/managePayroll'>Setting Gaji</a>
+  {!! Form::open(['action' => 'PayrollController@edit','method' => 'GET']) !!}
     <div class="form-group">
-      {{Form::label('date1', 'Tanggal Mulai')}}
-      {{Form::date('date1','',['class'=>'form-control'])}}
+      {{Form::label('baseGaji', 'Gaji Standar')}}
+      {{Form::number('baseGaji','',['class'=>'form-control'])}}
     </div>
     <div class="form-group">
       {{Form::label('date2', 'Tanggal Akhir')}}

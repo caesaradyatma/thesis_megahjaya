@@ -42,12 +42,26 @@
           <th>Status Pembayaran</th>
           <td>
             <?php
-              if($invoice->inv_status == 1){
-                echo "Lunas";
+              if($invoice->inv_type == 3){
+                if($piutang->piut_status == 1){
+                  echo "Lunas";
+                }
+                else{
+                  echo "Belum Lunas";
+                  echo "<br>";
+                  echo "<a href='/piutangs/{$invoice->piut_id}/edit'>Update Pembayaran</a>";
+                }
               }
-              else if($invoice->inv_status == 0){
-                echo "Menunggu Pembayaran";
+              else{
+                if($invoice->inv_status == 1){
+                  echo "Lunas";
+                }
+                else if($invoice->inv_status == 0){
+                  echo "Menunggu Pembayaran";
+                }
+
               }
+
              ?>
           </td>
         </tr>
@@ -77,8 +91,10 @@
         <td></td>
       </tr>
   </table>
+
   {!!Form::open(['action'=>['InvoicesController@destroy',$inv_id],'method'=>'POST','class'=>'pull-right','onsubmit'=>"return confirm('Apakah anda yakin akan menghapus data ini?');"])!!}
     {{Form::hidden('_method','DELETE')}}
     {{Form::submit('Hapus Data',['class'=>'btn btn-danger'])}}
   {!!Form::close()!!}
+
 @endsection

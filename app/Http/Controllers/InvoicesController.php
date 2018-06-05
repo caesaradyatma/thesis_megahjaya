@@ -38,6 +38,7 @@ class InvoicesController extends Controller
         $cst_names = DB::table('invoices')
           ->leftJoin('customers','invoices.cst_id','=','customers.id')
           ->select('invoices.*','customers.cst_name')
+          ->where('deleted_at',NULL)
           ->get();
         return view('finance.Invoice.indexInvoice')->with('invoices',$invoices)->with('cst_names',$cst_names)->with('piutangs',$piutangs);
 
@@ -142,13 +143,20 @@ class InvoicesController extends Controller
     public function store(Request $request)
     {
         //
+
+        $this->validate($request,[
+          'inv_date' => 'required'
+        ]);
+
         $cst_name = $request->input('cst_name');
         $cst_company = $request->input('cst_company');
         $customer = Customer::where('cst_name',$cst_name)->first();
         $company = Customer::where('cst_company',$cst_company)->first();
         $oldCart = Session::get('cart');
         $cart = new Cart($oldCart);
-
+        if($cst_name == NULL && $cst_company == NULL){
+          return redirect('invoices/getCart')->with('error','Nama Pelanggan atau Nama Perusahaan harus di isi');
+        }
         if($customer != NULL||$company !=NULL){
           $cst_id = $customer->id;
           $invoice = new Invoice;
@@ -807,20 +815,46 @@ class InvoicesController extends Controller
         //
         $invoice = Invoice::find($id);
         $inv_id = $id;
-        if($invoice != NULL){
-          $purchased_item = $invoice->inv_products;
-          $test = json_decode($purchased_item,true);
-          // print_r($test);
+        if($invoice == NULL){
+          return redirect('invoices')->with('error','Data yang ingin anda akses tidak ada');
+        }
+        if($invoice->piut_id != NULL){
+          $piut_id = $invoice->piut_id;
+          $piutang = Piutang::find($piut_id);
+          if($invoice != NULL){
+            $purchased_item = $invoice->inv_products;
+            $test = json_decode($purchased_item,true);
+            // print_r($test);
 
-          $products = $test['items'];
-          $totPrice = $test['totPrice'];
-          // foreach($products as $product){
-          //   echo $product['item']['item_name'];
-          //   echo $product['order_quantity'];
-          // }
-          return view('finance.Invoice.showInvoice')->with('products',$products)->with('totPrice',$totPrice)->with('inv_id',$inv_id)->with('invoice',$invoice);
+            $products = $test['items'];
+            $totPrice = $test['totPrice'];
+            // foreach($products as $product){
+            //   echo $product['item']['item_name'];
+            //   echo $product['order_quantity'];
+            // }
+            return view('finance.Invoice.showInvoice')->with('products',$products)->with('totPrice',$totPrice)->with('inv_id',$inv_id)->with('invoice',$invoice)->with('piutang',$piutang);
+          }
+          else{
+            return redirect('invoices')->with('error','Tidak ada');
+          }
         }
         else{
+          if($invoice != NULL){
+            $purchased_item = $invoice->inv_products;
+            $test = json_decode($purchased_item,true);
+            // print_r($test);
+
+            $products = $test['items'];
+            $totPrice = $test['totPrice'];
+            // foreach($products as $product){
+            //   echo $product['item']['item_name'];
+            //   echo $product['order_quantity'];
+            // }
+            return view('finance.Invoice.showInvoice')->with('products',$products)->with('totPrice',$totPrice)->with('inv_id',$inv_id)->with('invoice',$invoice);
+          }
+          else{
+            return redirect('invoices')->with('error','Tidak ada');
+          }
 
         }
     }
@@ -857,6 +891,12 @@ class InvoicesController extends Controller
     public function destroy($id)
     {
         //
+        $invoice = Invoice::find($id);
+        $date = date('Y-m-d');
+        $invoice->deleted_at = $date;
+        $invoice->save();
+
+        return redirect('/invoices')->with('success','Data Berhasil Dihapus');
     }
 
 

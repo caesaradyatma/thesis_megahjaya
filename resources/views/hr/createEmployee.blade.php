@@ -3,10 +3,11 @@
 @include('includes.navbar')
 
 @section('content')
+
   {!! Form::open(['action' => 'EmployeeController@store','method' => 'POST']) !!}
     <div class="form-group">
       {{Form::label('emp_type', 'Jenis/Pekerjaan Pegawai')}}
-      {{Form::select('emp_type',[1=>'Job 1',2=>'Job 2', 3=>'Job 3'],'',['class'=>'form-control'])}}
+      {{Form::select('emp_type',[1=>'Kuli Angkut',2=>'Supir', 3=>'Kasir'],'',['class'=>'form-control'])}}
     </div>
     <div class="form-group">
       {{Form::label('emp_name', 'Nama')}}
@@ -22,7 +23,7 @@
     </div>
     <div class="form-group">
       {{Form::label('emp_contact', 'Kontak')}}
-      {{Form::number('emp_contact','',['class'=>'form-control','placeholder'=>'Kontak Pegawai'])}}
+      {{Form::text('emp_contact','',['class'=>'form-control','placeholder'=>'Kontak Pegawai'])}}
     </div>
     <div class="form-group">
       {{Form::label('emp_address', 'Alamat')}}

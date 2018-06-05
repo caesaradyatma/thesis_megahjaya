@@ -6,7 +6,7 @@
   {!! Form::open(['action' => ['EmployeeController@update',$employee->id], 'method' => 'POST']) !!}
     <div class="form-group">
       {{Form::label('emp_type', 'Jenis/Pekerjaan Pegawai')}}
-      {{Form::select('emp_type',['1'=>1,'2'=>2,'3'=>3],$employee->in_type,['class'=>'form-control'])}}
+      {{Form::select('emp_type',[1=>'Kuli Angkut',2=>'Supir',3=>'Kasir'],$employee->in_type,['class'=>'form-control'])}}
     </div>
     <div class="form-group">
       {{Form::label('emp_name', 'Nama')}}
@@ -18,7 +18,7 @@
     </div>
     <div class="form-group">
       {{Form::label('emp_gender', 'Jenis Kelamin')}}
-      {{Form::select('emp_gender',['Pria'=>1,'Wanita'=>2],$employee->emp_gender,['class'=>'form-control'])}}
+      {{Form::select('emp_gender',[1=>'Pria',2=>'Wanita'],$employee->emp_gender,['class'=>'form-control'])}}
     </div>
     <div class="form-group">
       {{Form::label('emp_contact', 'Kontak')}}

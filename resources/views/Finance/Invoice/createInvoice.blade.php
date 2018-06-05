@@ -86,7 +86,7 @@
     </div>
     <hr>
     <small>Data Pelanggan</small>
-    {!! Form::open(['action' => 'InvoicesController@store','method' => 'POST']) !!}
+    {!! Form::open(['action' => 'InvoicesController@store','method' => 'POST','id'=>'test','onsubmit'=>"return confirm('Apakah anda yakin akan memasukan data ini? Data invoice tidak dapat diubah setelah disubmit');"]) !!}
       <div class="form-group">
         {{Form::label('cst_name', 'Nama Pelanggan')}}
         {{Form::text('cst_name','',['class'=>'form-control','placeholder'=>'Nama Pelanggan'])}}
@@ -107,23 +107,52 @@
         {{Form::label('inv_type', 'Jenis Transaksi')}}
         {{Form::select('inv_type',[1=>'Lunas',2=>'Diantar',3=>'Utang'],'',['class'=>'form-control'])}}
       </div>
-      <div class="form-group">
-        <label for="Products"></label>
-        <input type="text" class="form-control" id="wek" placeholder="Products">
-
-      </div>
-      <button id="btn1">Append form</button>
+      {{-- <div class="form-group1">
+        <label for="Products">Barang yang Dipesan</label>
+        <table id="prod">
+          <tr>
+            <td><input type="text" name="products[]" class="form-control" id="wek" placeholder="Products"></td>
+            <td><input type="number" name="quantity[]" class="form-control"></td>
+          </tr>
+        </table>
+        <input type="text" name="products[]" class="form-control" id="wek" placeholder="Products">
+      </div> --}}
       {{Form::hidden('_method','POST')}}
       {{Form::submit('Submit',['class'=>'btn btn-primary form-control'])}}
     {!! Form::close() !!}
   </div>
+  {{-- <button class="add_form_field">Add New Field &nbsp; <span style="font-size:16px; font-weight:bold;">+ </span></button> --}}
+
 @endsection
 @section('scripts')
   <script>
-    $(document).ready(function(){
-      $("#btn1").click(function(){
-          $("#wek").append("<input type='text' class='form-control' id='wex' placeholder='Products'>");
-      });
+    // $(document).ready(function(){
+    //   $("#btn1").click(function(){
+    //       $("#wek").append("<input type='text' class='form-control' id='wex' placeholder='Products'>");
+    //   });
+    // });
+    $(document).ready(function() {
+        var max_fields      = 10;
+        var wrapper         = $("#prod");
+        var add_button      = $(".add_form_field");
+
+        var x = 1;
+        $(add_button).click(function(e){
+            e.preventDefault();
+            if(x < max_fields){
+                x++;
+                // $(wrapper).append('<div><input type="text" class="form-control" placeholder="Products" name="products[]"/><a href="#" class="delete">Delete</a></div>'); //add input box
+                $(wrapper).append('<tr><td><input type="text" class="form-control" placeholder="Products" name="products[]"/></td><td><input type="number" name="quantity[]" class="form-control"></td><td><a href="#" class="delete">Delete</a></td><tr>'); //add input box
+            }
+            else
+            {
+                alert('You Reached the limits')
+            }
+        });
+
+        $(wrapper).on("click",".delete", function(e){
+            e.preventDefault(); $(this).parents('tr').remove(); x--;
+        })
     });
   </script>
 

@@ -229,6 +229,6 @@ class PiutangsController extends Controller
         // $income->in_deleteStat = 1;
         // $income->in_deletedAt = $date;
         // $income->save();
-        return redirect('/incomes')->with('success', 'Data Piutang Telah Dihapus');
+        return redirect('/piutangs')->with('success', 'Data Piutang Telah Dihapus');
     }
 }

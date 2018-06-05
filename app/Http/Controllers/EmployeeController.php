@@ -54,7 +54,7 @@ class EmployeeController extends Controller
         $employee = new Employee;
         $employee->emp_name = $request->input('emp_name');
         $employee->emp_age = $request->input('emp_age');
-        $employee->emp_type = $request->input('in_type');
+        $employee->emp_type = $request->input('emp_type');
         $employee->emp_gender = $request->input('emp_gender');
         $employee->emp_contact = $request->input('emp_contact');
         $employee->emp_address = $request->input('emp_address');
@@ -142,7 +142,7 @@ class EmployeeController extends Controller
         $employee = Employee::find($id);
         $employee->emp_name = $request->input('emp_name');
         $employee->emp_age = $request->input('emp_age');
-        $employee->emp_type = $request->input('in_type');
+        $employee->emp_type = $request->input('emp_type');
         $employee->emp_gender = $request->input('emp_gender');
         $employee->emp_contact = $request->input('emp_contact');
         $employee->emp_address = $request->input('emp_address');
@@ -164,7 +164,7 @@ class EmployeeController extends Controller
         //
         $employee = Employee::find($id);
         $date = date('Y-m-d H:i:s');
-        $employee->id = auth()->user->id;
+        $employee->user_id = auth()->user()->id;
         $employee->emp_deletedAt = $date;
 
         $employee->save();

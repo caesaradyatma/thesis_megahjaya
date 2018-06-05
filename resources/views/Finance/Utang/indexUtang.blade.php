@@ -4,17 +4,32 @@
 
 @section('content')
   <h1>Utang</h1>
+  <hr>
+  <div class="col-sm-4">
+      <small>List Utang</small>
+  </div>
+  <div class="col-sm-4">
+  </div>
+  <div class="col-sm-4">
+    <center>
+      <form>
+        <div class="form-group">
+          <input type="text" name="searchValue" style="form-control" placeholder="search">
+          <input type="submit" name="submit" value="submit" class="btn btn-primary">
+        </div>
+      </form>
+    </center>
+  </div>
+
   @if (count($utangs)>0)
     <table class="table table-striped">
       <tr>
         <th>Utang ID</th>
         <th>Status</th>
+        <th>Nama Kreditur</th>
         <th>Keterangan</th>
         <th>Jumlah Utang</th>
         <th>Tanggal Jatuh Tempo</th>
-        <th>Jumlah Pembayaran</th>
-        <th>Tanggal Pembayaran</th>
-        <th>Nama Pembayar</th>
         <th>Details</th>
       </tr>
       @foreach ($utangs as $utang)
@@ -24,7 +39,7 @@
           </td>
           <td>
             @if ($utang->utg_status == 1)
-              <p>Lunas</p>
+              <p style="background-color:green;color:white;">Lunas</p>
             @elseif ($utang->utg_status == 0)
               <p>Belum Lunas</p>
             @endif
@@ -33,19 +48,13 @@
             <p>{{$utang->utg_name}}</p>
           </td>
           <td>
+            <p>{{$utang->utg_desc}}</p>
+          </td>
+          <td>
             <p>{{number_format($utang->utg_amount)}}</p>
           </td>
           <td>
             <p>{{$utang->utg_duedate}}</p>
-          </td>
-          <td>
-            <p>{{$utang->utg_paidamount}}</p>
-          </td>
-          <td>
-            <p>{{$utang->utg_paiddate}}</p>
-          </td>
-          <td>
-            <p>{{$utang->utg_payer}}</p>
           </td>
           <td>
             <a href='/utangs/{{$utang->utg_id}}'class="btn btn-default">

@@ -4,7 +4,7 @@
 
 @section('content')
   {!! Form::open(['action' => 'AttendanceController@update','method' => 'POST']) !!}
-    <table class='table table-striped' style="text-align:center;">
+    <table class='table table-striped'>
       <tr>
         <th>ID</th>
         <th>Nama</th>

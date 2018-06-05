@@ -4,6 +4,21 @@
 
 @section('content')
   <h1>Pendapatan</h1>
+  <div class="col-sm-4">
+      <small>List Pendapatan</small>
+  </div>
+  <div class="col-sm-4">
+  </div>
+  <div class="col-sm-4">
+    <center>
+      <form>
+        <div class="form-group">
+          <input type="text" name="searchValue" style="form-control" placeholder="search">
+          <input type="submit" name="submit" value="submit" class="btn btn-primary">
+        </div>
+      </form>
+    </center>
+  </div>
   @if (count($incomes)>0)
     <table class="table table-striped">
       <tr>
@@ -22,11 +37,11 @@
           </td>
           <td>
             @if ($income->in_type == 1)
-              <p>Piutang</p>
-            @elseif ($income->in_type == 2)
-              <p>Penjualan</p>
-            @elseif ($income->in_type == 3)
               <p>Pendapatan Pribadi</p>
+            @elseif ($income->in_type == 2)
+              <p>Penambahan Modal</p>
+            @elseif ($income->in_type == 3)
+              <p>Lain - Lain</p>
             @endif
           </td>
           <td>

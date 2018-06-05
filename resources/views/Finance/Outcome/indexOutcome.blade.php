@@ -4,7 +4,21 @@
 
 @section('content')
   <h1>Pengeluaran</h1>
-  
+  <div class="col-sm-4">
+      <small>List Pengeluaran</small>
+  </div>
+  <div class="col-sm-4">
+  </div>
+  <div class="col-sm-4">
+    <center>
+      <form>
+        <div class="form-group">
+          <input type="text" name="searchValue" style="form-control" placeholder="search">
+          <input type="submit" name="submit" value="submit" class="btn btn-primary">
+        </div>
+      </form>
+    </center>
+  </div>
   @if (count($outcomes)>0)
     <table class="table table-striped">
       <tr>
