@@ -68,16 +68,16 @@ class OutcomesController extends Controller
       $outcome->out_deleteStat = 0;
       // $income->in_deletedAt = 0000-00-00 00:00:00;
 
-      if($out_type == 1){
-        $utang = new Utang;
-        $utang->utg_duedate = $request->input('out_date');
-        $utang->user_id = auth()->user()->id;
-        $utang->save();
-
-        $utang2 = Utang::orderBy('utg_id','desc')->first();
-        $lastUtg_id = $utang2->utg_id;
-        $outcome->utg_id = $lastUtg_id;
-      }
+      // if($out_type == 1){
+      //   $utang = new Utang;
+      //   $utang->utg_duedate = $request->input('out_date');
+      //   $utang->user_id = auth()->user()->id;
+      //   $utang->save();
+      //
+      //   $utang2 = Utang::orderBy('utg_id','desc')->first();
+      //   $lastUtg_id = $utang2->utg_id;
+      //   $outcome->utg_id = $lastUtg_id;
+      // }
 
 
       $outcome->save();
@@ -172,12 +172,12 @@ class OutcomesController extends Controller
         // $income->in_deleteStat = 0;
         $outcome->save();
 
-        if($out_type == 1){
-          $utang = Utang::find($utg_id);
-          $utang->utg_duedate = $request->input('out_date');
-          $utang->user_id = auth()->user()->id;
-          $utang->save();
-        }
+        // if($out_type == 1){
+        //   $utang = Utang::find($utg_id);
+        //   $utang->utg_duedate = $request->input('out_date');
+        //   $utang->user_id = auth()->user()->id;
+        //   $utang->save();
+        // }
 
 
         return redirect('/outcomes')->with('success', 'Data Pengeluaran Berhasil Diupdate');
@@ -197,13 +197,13 @@ class OutcomesController extends Controller
 
         //temp deletion
         $date = date('Y-m-d H:i:s');
-        if($outcome->out_type == 1){//if utang, delete from utang table also
-          $utg_id=$outcome->utg_id;
-          $utang= Utang::find($utg_id);
-          $utang->utg_deleteStat = 1;
-          $utang->utg_deletedAt = $date;
-          $utang->save();
-        }
+        // if($outcome->out_type == 1){
+        //   $utg_id=$outcome->utg_id;
+        //   $utang= Utang::find($utg_id);
+        //   $utang->utg_deleteStat = 1;
+        //   $utang->utg_deletedAt = $date;
+        //   $utang->save();
+        // }
         $outcome->user_id = auth()->user()->id;
         $outcome->out_deleteStat = 1;
         $outcome->out_deletedAt = $date;

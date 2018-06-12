@@ -37,11 +37,9 @@
           </td>
           <td>
             @if ($income->in_type == 1)
-              <p>Pendapatan Pribadi</p>
+              <p>Penjualan</p>
             @elseif ($income->in_type == 2)
               <p>Penambahan Modal</p>
-            @elseif ($income->in_type == 3)
-              <p>Lain - Lain</p>
             @endif
           </td>
           <td>

@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
-@include('includes.navbar')
+@include('includes.hrNavbar')
 
 @section('content')
+  <h1>Absensi Pegawai</h1>
+  <hr>
   {!! Form::open(['action' => 'AttendanceController@update','method' => 'POST']) !!}
     <table class='table table-striped'>
       <tr>

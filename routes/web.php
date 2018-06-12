@@ -25,6 +25,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/finance','HomeController@finance');
+
+Route::get('/hr','HomeController@hr');
+
 Route::resource('outcomes','OutcomesController');
 
 Route::resource('utangs','UtangsController');
@@ -35,7 +39,7 @@ Route::resource('piutangs','PiutangsController');
 
 Route::get('inStatement','IncomeStatementController@index');
 
-Route::get('inStatement/report','IncomeStatementController@show');
+Route::get('inStatement/report','IncomeStatementController@create');
 
 Route::get('cashFlow','CashFlowStatementController@index');
 
@@ -86,3 +90,7 @@ Route::get('payroll/calculate','PayrollController@create');
 Route::get('payroll/setPayrollView','PayrollController@setPayrollView');
 
 Route::post('payroll/setPayroll','PayrollController@setPayroll');
+
+Route::get('ledger/','GeneralLedgerController@filterDate');
+
+Route::get('ledger/create','GeneralLedgerController@create');

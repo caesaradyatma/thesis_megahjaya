@@ -50,7 +50,7 @@
         <th>Nama Barang</th>
         <th>Jumlah Pesanan</th>
         <th>Harga Satuan</th>
-        <th>Dikali</th>
+        <th>Jumlah X Harga</th>
         <th>Edit</th>
       </tr>
       @if(Session::has('cart'))
@@ -78,7 +78,7 @@
     </table>
     <div class="row">
       <div class='col-sm-6'>
-        <a href="getCart/deleteCart" class="btn btn-danger">Hapus Pesanan</a>
+        <a href="getCart/deleteCart" class="btn btn-danger" onclick="return confirm('Apakah Anda Yakin ingin Menghapus Pesanan?')">Hapus Pesanan</a>
       </div>
       <div class='col-sm-6'>
         <a href="create" class="btn btn-primary">Tambah Pesanan</a>
@@ -104,8 +104,16 @@
         {{Form::number('inv_totPrice',$totPrice,['class'=>'form-control','placeholder'=>'Nama Pelanggan'])}}
       </div>
       <div class="form-group">
+        {{Form::label('inv_phone', 'Nomor Telepon')}}
+        {{Form::text('inv_phone','',['class'=>'form-control','placeholder'=>'Nomor Pelanggan','required'])}}
+      </div>
+      <div class="form-group">
+        {{Form::label('inv_address', 'Alamat')}}
+        {{Form::textArea('inv_address','',['class'=>'form-control','placeholder'=>'Alamat','required'])}}
+      </div>
+      <div class="form-group">
         {{Form::label('inv_type', 'Jenis Transaksi')}}
-        {{Form::select('inv_type',[1=>'Lunas',2=>'Diantar',3=>'Utang'],'',['class'=>'form-control'])}}
+        {{Form::select('inv_type',[1=>'Bon 1',2=>'Bon 2 Tunai',3=>'Bon 3',4=>'Bon 2 Utang'],'',['class'=>'form-control'])}}
       </div>
       {{-- <div class="form-group1">
         <label for="Products">Barang yang Dipesan</label>

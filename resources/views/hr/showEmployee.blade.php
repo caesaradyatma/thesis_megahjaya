@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@include('includes.navbar')
+@include('includes.hrNavbar')
   <div class="col-sm-12">
     <a href="/employees" class="btn btn-default" style="margin-bottom:20px;">Kembali ke List Pegawai</a>
       <h2>List Pegawai</h2>

@@ -5,6 +5,10 @@
 @section('content')
   {!! Form::open(['action' => ['UtangsController@update',$utang->utg_id], 'method' => 'POST']) !!}
     <div class="form-group">
+      {{Form::label('utg_type', 'Jenis Utang')}}
+      {{Form::select('utg_type',[6=>'Pinjaman dari Bank',7=>'Pinjaman dari Orang', 8=>'Pembelian Stock'],$utang->utg_type,['class'=>'form-control'])}}
+    </div>
+    <div class="form-group">
       {{Form::label('utg_name', 'Nama')}}
       {{Form::text('utg_name',$utang->utg_name,['class'=>'form-control','placeholder'=>'Nama Kreditur'])}}
     </div>

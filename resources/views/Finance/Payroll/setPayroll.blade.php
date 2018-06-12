@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@include('includes.navbar')
+@include('includes.hrNavbar')
 
 @section('content')
   <h1>Hitung Gaji</h1>
@@ -12,12 +12,19 @@
       <input name= "salary_base" type="number" class="form-control" value={{$basePayroll->payroll_amount}}>
       <p class="help-block">Gaji Pokok</p>
     </div>
+    <h3>Bonus</h3>
+    <hr>
     <div class="form-group">
       <label for="amount">Bonus Pegawai Wanita</label>
       <input name= "salary_women" type="number" class="form-control" value={{$womenPayroll->payroll_amount}}>
-      <p class="help-block">Gaji Pokok</p>
+      <p class="help-block">Bonus Wanita</p>
     </div>
     <div class="form-group">
+      <label for="amount">Bonus Masuk 6 hari</label>
+      <input name= "salary_women" type="number" class="form-control" value={{$womenPayroll->payroll_amount}}>
+      <p class="help-block">Bonus Absen</p>
+    </div>
+    {{-- <div class="form-group">
       <h2>Gaji Bonus</h2>
       <small>Bonus Saat Ini</small>
       <table class="table">
@@ -42,7 +49,6 @@
       <table id="prod">
         <tr>
           <td>
-            {{-- <input type="text" name="bonus_name[]" class="form-control" id="wek" placeholder="Nama Bonus"> --}}
             <select class="form-control" name="bonus_name[]">
               <option  value="emp_type">Jabatan</option>
               <option  value="emp_education">Pendidikan Terakhir</option>
@@ -56,7 +62,7 @@
           </td>
         </tr>
       </table>
-    </div>
+    </div> --}}
 
     <input type="submit" name="submit" value="Submit" class="btn btn-primary form-control">
   {{-- </form> --}}

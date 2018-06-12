@@ -6,7 +6,7 @@
  ?>
 @section('content')
   <div class="container-fluid">
-    <h1>Pembuatan Invoice</h1>
+    <h1>Pembuatan Bon</h1>
     <small>Pilih barang yang dipesan pelanggan</small><br>
     <div class="row" style="margin-top:20px;">
       <div class="col-sm-6">

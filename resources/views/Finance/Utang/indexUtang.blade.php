@@ -6,7 +6,7 @@
   <h1>Utang</h1>
   <hr>
   <div class="col-sm-4">
-      <small>List Utang</small>
+      <a href="utangs/create" class="btn btn-primary">Input data Utang</a>
   </div>
   <div class="col-sm-4">
   </div>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@include('includes.navbar')
+@include('includes.hrNavbar')
 
 @section('content')
   {!! Form::open(['action' => ['EmployeeController@update',$employee->id], 'method' => 'POST']) !!}

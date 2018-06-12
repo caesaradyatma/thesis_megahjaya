@@ -65,6 +65,21 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="/finance">
+                                    Modul Finance
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/hr">
+                                    Modul HR
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/inventory">
+                                    Modul Inventory
+                                </a>
+                            </li>
+                            <li>
                                 <a href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">

@@ -56,11 +56,13 @@ class PiutangsController extends Controller
           'piut_name' => 'required',
           'piut_amount' => 'required',
           'piut_duedate' => 'required',
+          'piut_type' => 'required',
           'piut_desc' => 'required'
         ]);
         //piutang
         $piutang = new Piutang;
         $piutang->user_id = auth()->user()->id;
+        $piutang->piut_type = $request->input('piut_type');
         $piutang->piut_duedate = $request->input('piut_duedate');
         $piutang->piut_name = $request->input('piut_name');
         $piutang->piut_amount = $request->input('piut_amount');

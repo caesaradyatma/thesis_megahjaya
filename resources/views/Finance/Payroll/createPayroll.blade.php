@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@include('includes.navbar')
+@include('includes.hrNavbar')
 
 @section('content')
   <div class='col=sm-12'>
@@ -73,7 +73,7 @@
       <input type="hidden" name="out_name" value="Gaji {{$date1}}/{{$date2}}">
       <input type="hidden" name="out_date" value="{{$date}}">
       <input type="hidden" name="out_desc" value="Gaji untuk tanggal {{$date1}} hingga {{$date2}}">
-      <input type="hidden" name="out_type" value="2">
+      <input type="hidden" name="out_type" value=4>
       <input type="submit" class="btn btn-primary form-control" name="submit" value="Buat Data Pengeluaran">
     {!! Form::close() !!}
   </div>

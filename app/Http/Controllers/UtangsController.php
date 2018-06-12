@@ -55,6 +55,7 @@ class UtangsController extends Controller
     {
         //
         $this->validate($request,[
+          'utg_type' => 'required',
           'utg_name' => 'required',
           'utg_amount' => 'required',
           'utg_duedate' => 'required',
@@ -63,6 +64,7 @@ class UtangsController extends Controller
         //utang
         $utang = new Utang;
         $utang->user_id = auth()->user()->id;
+        $utang->utg_type = $request->input('utg_type');
         $utang->utg_duedate = $request->input('utg_duedate');
         $utang->utg_name = $request->input('utg_name');
         $utang->utg_amount = $request->input('utg_amount');
@@ -155,12 +157,14 @@ class UtangsController extends Controller
     {
         //
         $this->validate($request,[
+          'utg_type' => 'required',
           'utg_name' => 'required',
           'utg_amount' => 'required',
           'utg_duedate' => 'required',
 
         ]);
         $utang = Utang::find($utg_id);
+        $utang->utg_type = $request->input('utg_type');
         $utang->utg_duedate = $request->input('utg_duedate');
         $utang->utg_paidamount = $request->input('utg_paidamount');
         $utang->utg_paiddate = $request->input('utg_paiddate');

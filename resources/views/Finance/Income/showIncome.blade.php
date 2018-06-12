@@ -23,11 +23,9 @@
       </td>
       <td>
         @if ($income->in_type == 1)
-          <p>Piutang</p>
-        @elseif ($income->in_type == 2)
           <p>Penjualan</p>
-        @elseif ($income->in_type == 3)
-          <p>Pendapatan Pribadi</p>
+        @elseif ($income->in_type == 2)
+          <p>Penambahan Modal</p>
         @endif
       </td>
       <td>

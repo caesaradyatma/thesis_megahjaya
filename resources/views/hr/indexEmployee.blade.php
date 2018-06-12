@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@include('includes.navbar')
+@include('includes.hrNavbar')
 
 @section('content')
   <div class="container-fluid">
       <h1>List Pegawai</h1>
       <hr>
       <div class="col-sm-4">
-          <small>List Utang</small>
+          <a href="employees/create" class="btn btn-primary">Input Pegawai Baru</a>
       </div>
       <div class="col-sm-4">
       </div>

@@ -38,7 +38,7 @@ class InvoicesController extends Controller
         $cst_names = DB::table('invoices')
           ->leftJoin('customers','invoices.cst_id','=','customers.id')
           ->select('invoices.*','customers.cst_name')
-          ->where('deleted_at',NULL)
+          ->where('invoices.deleted_at',NULL)
           ->get();
         return view('finance.Invoice.indexInvoice')->with('invoices',$invoices)->with('cst_names',$cst_names)->with('piutangs',$piutangs);
 
@@ -106,6 +106,7 @@ class InvoicesController extends Controller
         $cart = new Cart($oldCart);
         $totPrice = $cart->totPrice;
         $products = $cart->items;
+        // dd($cart);
         return view('finance.Invoice.createInvoice')->with('products',$products)->with('totPrice',$totPrice);
     }
 
@@ -143,9 +144,10 @@ class InvoicesController extends Controller
     public function store(Request $request)
     {
         //
-
         $this->validate($request,[
-          'inv_date' => 'required'
+          'inv_date' => 'required',
+          'inv_phone' => 'required',
+          'inv_address' => 'required'
         ]);
 
         $cst_name = $request->input('cst_name');
@@ -154,20 +156,39 @@ class InvoicesController extends Controller
         $company = Customer::where('cst_company',$cst_company)->first();
         $oldCart = Session::get('cart');
         $cart = new Cart($oldCart);
+        $products = $cart->items;
+
         if($cst_name == NULL && $cst_company == NULL){
           return redirect('invoices/getCart')->with('error','Nama Pelanggan atau Nama Perusahaan harus di isi');
         }
-        if($customer != NULL||$company !=NULL){
+        if($customer != NULL){
           $cst_id = $customer->id;
           $invoice = new Invoice;
           $invoice->inv_date = $request->input('inv_date');
           $invoice->inv_totPrice = $request->input('inv_totPrice');
           $invoice->inv_type = $request->input('inv_type');
+          $invoice->inv_phone = $request->input('inv_phone');
+          $invoice->inv_address = $request->input('inv_address');
           $inv_type = $request->input('inv_type');
-          if($inv_type == 1){
+          $date =  $request->input('inv_date');
+          if($inv_type == 1 || $inv_type == 2){
             $invoice->inv_status=1;
+            // $income = new Income;
+            // $income->in_type = 1;
+            // $income->in_name = "Penjualan";
+            // $income->in_amount = $request->input('inv_totPrice');
+            // $income->in_date = $request->input('inv_date');
+            // $income->user_id = auth()->user()->id;
+            // $string = "Penjualan ";
+            // foreach($products as $product){
+            //     $string = $string.$product['item']['item_name']." ";
+            // }
+            // $income->in_desc = $string;
+            // $income->save();
+            // $income = Income::orderBy('created_at','desc')->first();
+            // $in_id = $income->in_id;
           }
-          else if($inv_type == 3){
+          else if($inv_type == 3 || $inv_type == 4){
             $invoice->inv_status=0;
             $piutang = new Piutang;
             $piutang->piut_name = $cst_name;
@@ -184,6 +205,14 @@ class InvoicesController extends Controller
           $invoice->cst_id = $cst_id;
           $invoice->inv_products = json_encode($cart);
           $invoice->save();
+          foreach($products as $product)
+          {
+            $inventory = Inventorylist::where('item_name',$product['item']['item_name'])->first();
+            $currentInv = $inventory->item_quantity;
+            $inventory->item_quantity = $currentInv - $product['order_quantity'];
+            $inventory->save();
+          }
+
           Session::forget('cart');
 
           $invoices = Invoice::where('deleted_at',NULL)->paginate(10);
@@ -209,12 +238,14 @@ class InvoicesController extends Controller
           $invoice->inv_date = $request->input('inv_date');
           $invoice->inv_totPrice = $request->input('inv_totPrice');
           $invoice->inv_type = $request->input('inv_type');
+          $invoice->inv_phone = $request->input('inv_phone');
+          $invoice->inv_address = $request->input('inv_address');
           $inv_type = $request->input('inv_type');
           $invoice->cst_id = $custID;
-          if($inv_type == 1){
+          if($inv_type == 1 || $inv_type == 2){
             $invoice->inv_status=1;
           }
-          else if($inv_type == 3){
+          else if($inv_type == 3 || $inv_type == 4){
             $invoice->inv_status=0;
             $piutang = new Piutang;
             $piutang->piut_name = $cst_name;
@@ -229,6 +260,13 @@ class InvoicesController extends Controller
           }
           $invoice->inv_products = json_encode($cart);
           $invoice->save();
+          foreach($products as $product)
+          {
+            $inventory = Inventorylist::where('item_name',$product['item']['item_name'])->first();
+            $currentInv = $inventory->item_quantity;
+            $inventory->item_quantity = $currentInv - $product['order_quantity'];
+            $inventory->save();
+          }
           Session::forget('cart');
 
           $invoices = Invoice::where('deleted_at',NULL)->paginate(10);

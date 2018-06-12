@@ -168,6 +168,6 @@ class EmployeeController extends Controller
         $employee->emp_deletedAt = $date;
 
         $employee->save();
-        return redirect('/employees')->with('success', 'Data Pendapatan Telah Dihapus');
+        return redirect('/employees')->with('success', 'Data Pegawai Telah Dihapus');
     }
 }

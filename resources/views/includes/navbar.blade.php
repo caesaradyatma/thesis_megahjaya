@@ -145,18 +145,18 @@
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            Invoice<span class="caret"></span>
+                            Bon<span class="caret"></span>
                         </a>
 
                         <ul class="dropdown-menu" role="menu">
                             <li>
                                 <a href="/invoices">
-                                    List Invoice
+                                    List Bon
                                 </a>
                             </li>
                             <li>
                                 <a href="/invoices/create">
-                                    Buat Invoice Baru
+                                    Buat Bon Baru
                                 </a>
                             </li>
                         </ul>
@@ -170,6 +170,21 @@
                             <li>
                                 <a href="/home">
                                     Home
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/finance">
+                                    Modul Finance
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/hr">
+                                    Modul HR
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/inventory">
+                                    Modul Inventory
                                 </a>
                             </li>
                             <li>

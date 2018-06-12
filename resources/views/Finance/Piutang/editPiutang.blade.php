@@ -5,6 +5,10 @@
 @section('content')
   {!! Form::open(['action' => ['PiutangsController@update',$piutang->piut_id], 'method' => 'POST']) !!}
     <div class="form-group">
+      {{Form::label('piut_type', 'Jenis Utang')}}
+      {{Form::select('piut_type',[9=>'Penjualan',10=>'Pinjaman untuk Orang'],'',['class'=>'form-control'])}}
+    </div>
+    <div class="form-group">
       {{Form::label('piut_name', 'Nama')}}
       {{Form::text('piut_name',$piutang->piut_name,['class'=>'form-control','placeholder'=>'Nama Debittur'])}}
     </div>

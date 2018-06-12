@@ -6,34 +6,34 @@
   <a href="/invoices" class="btn btn-default"style="margin-bottom:20px;">Kembali ke List Bon</a>
   <div class="panel panel-primary">
     <div class="panel-heading">
-      Data Invoice
+      Data Bon
     </div>
     <div class="panel-body">
       <table class="table">
         <tr>
-          <th>ID Invoice</th>
+          <th>ID Bon</th>
           <td>{{$inv_id}}</td>
         </tr>
         <tr>
-          <th>Tanggal Invoice</th>
+          <th>Tanggal Bon</th>
           <td>{{$invoice->inv_date}}</td>
         </tr>
         <tr>
-          <th>Jenis Transaksi</th>
+          <th>Jenis Bon</th>
           <td>
             <?php
               if($invoice->inv_type == 1){
-                echo "Tunai";
+                echo "Bon 1";
 
               }
               else if($invoice->inv_type == 2){
-                echo "Tunai & Diantar";
+                echo "Bon 2";
               }
               else if($invoice->inv_type == 3){
-                echo "Utang";
+                echo "Bon 3";
               }
               else if($invoice->inv_type == 4){
-                echo "Utang & Diantar";
+                echo "Bon 2";
               }
              ?>
           </td>
@@ -64,6 +64,14 @@
 
              ?>
           </td>
+        </tr>
+        <tr>
+          <th>Nomor Telepon</th>
+          <td>{{$invoice->inv_phone}}</td>
+        </tr>
+        <tr>
+          <th>Alamat</th>
+          <td>{{$invoice->inv_address}}</td>
         </tr>
       </table>
     </div>

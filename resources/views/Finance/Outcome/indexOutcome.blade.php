@@ -36,12 +36,14 @@
             <p>{{$outcome->out_id}}</p>
           </td>
           <td>
-            @if ($outcome->out_type == 1)
-              <p>Utang</p>
-            @elseif ($outcome->out_type == 2)
+            @if ($outcome->out_type == 3)
               <p>Biaya</p>
-            @elseif ($outcome->out_type == 3)
-              <p>DLL</p>
+            @elseif ($outcome->out_type == 4)
+              <p>Gaji Karyawan</p>
+            @elseif ($outcome->out_type == 5)
+              <p>Bensin</p>
+            @elseif ($outcome->out_type == 11)
+              <p>Pembelian Inventory</p>
             @endif
           </td>
           <td>

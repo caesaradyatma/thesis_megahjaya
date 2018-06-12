@@ -3,7 +3,7 @@
 @include('includes.navbar')
 
 @section('content')
-  <h1>Invoice/Bon</h1>
+  <h1>Bon/Invoice</h1>
 
   <!-- Modal -->
   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -59,9 +59,9 @@
     <div class="col-sm-12">
       <!-- Button trigger modal -->
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-        Cari Invoice
+        Cari Bon
       </button>
-      <a href="invoices/create" class="btn btn-success">Buat Invoice Baru</a>
+      <a href="invoices/create" class="btn btn-success">Buat Bon Baru</a>
       <hr>
     </div>
   </div>
@@ -72,8 +72,8 @@
         <th>Tanggal Transaksi</th>
         <th>Nama Pelanggan</th>
         <th>Jumlah Transaksi</th>
-        <th>Jenis Transaksi</th>
-        {{-- <th>Status</th> --}}
+        <th>Jenis Bon</th>
+        <th>Status</th>
         <th>Lihat Detail</th>
         {{-- <th>Barang Yang dibeli</th> --}}
       </tr>
@@ -86,17 +86,17 @@
           <td>
             <?php
               if($cst_name->inv_type == 1){
-                echo "Tunai";
+                echo "Bon 1";
 
               }
               else if($cst_name->inv_type == 2){
-                echo "Tunai & Diantar";
+                echo "Bon 2";
               }
               else if($cst_name->inv_type == 3){
-                echo "Utang";
+                echo "Bon 3";
               }
               else if($cst_name->inv_type == 4){
-                echo "Utang & Diantar";
+                echo "Bon 2";
               }
              ?>
           </td>
@@ -104,7 +104,7 @@
             <?php
 
               foreach($piutangs as $piutang){
-                if($cst_name->inv_type == 1){
+                if($cst_name->inv_type == 1 || $cst_name->inv_type == 2){
                   echo "<p style='background-color:green;color:white;'>Lunas</p>";
                   break 1;
                 }

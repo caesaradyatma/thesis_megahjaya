@@ -31,29 +31,6 @@ class IncomeStatementController extends Controller
     public function create()
     {
         //
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request)
-    {
         // retrieve data from period
         // $period1 = $request->input('period1');
         // $period2 = $request->input('period2');
@@ -113,6 +90,29 @@ class IncomeStatementController extends Controller
         ->with('costs',$costs)
         ->with('totCosts',$totCosts);
         // return view('/finance.Report.showIncomeStatement')->with('incomes',$incomes);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request)
+    {
+
     }
 
     /**

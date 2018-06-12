@@ -5,7 +5,7 @@
 @section('content')
   <h1>Piutang</h1>
   <div class="col-sm-4">
-      <small>List Piutang</small>
+      <a href="piutangs/create" class="btn btn-primary">Input data Piutang</a>
   </div>
   <div class="col-sm-4">
   </div>
