@@ -44,6 +44,8 @@
               <p>Bensin</p>
             @elseif ($outcome->out_type == 11)
               <p>Pembelian Inventory</p>
+            @elseif($outcome->out_type == 13)
+              <p>Pelunasan Utang</p>
             @endif
           </td>
           <td>
@@ -66,7 +68,9 @@
         </tr>
       @endforeach
     </table>
-    {{$outcomes->links()}};
+    <center>
+      {{$outcomes->links()}};
+    </center>
   @else
     <div class="btn-danger">
       <p>There are no posts</p>

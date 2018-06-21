@@ -64,6 +64,16 @@
               <div class="panel-body">
                 <p>Total Piutang</p>
                 <h3>Rp {{number_format($totPiutang)}}</h3>
+                <table>
+                  <tr>
+                    <td><span class='glyphicon glyphicon-stop' style="color:#f4ce42;"></span></td>
+                    <td>Kurang dari 7 hari menuju deadline</td>
+                  </tr>
+                  <tr>
+                    <td><span class='glyphicon glyphicon-stop' style="color:#f44242;"></span></td>
+                    <td>Lewat Deadline</td>
+                  </tr>
+                </table>
                 <table class="table">
                   <tr>
                     <th>Tanggal Jatuh Tempo</th>
@@ -79,31 +89,65 @@
                       }
                       else{
                         $x = 0;
+                        $date = date('Y-m-d');
+                        $date1 = date_create($date);
                         foreach($piutangs as $piutang){
-                          if($piutang->piut_id == $piut_duedates[$x]){
-                            if($piut_days[$x] < 7){
-                                echo "<tr style='background-color:#f4ce42;color:white;'>";
-                            }
-                            else{
-                              echo "<tr>";
-                            }
-                            if($piut_days[$x] < 3){
-                              echo "<td><span class='glyphicon glyphicon-exclamation-sign'></span> ".$piutang->piut_duedate."</td>";
-                            }
-                            else{
-                              echo "<td>".$piutang->piut_duedate."</td>";
-                            }
+                          $date2 = date_create($piutang->piut_duedate);
+                          $days_left = $date2->diff($date1);
+                          $int = $days_left->days;
+                          if($piutang->piut_duedate > $date && $int <= 7){
+                            echo "<tr style='background-color:#f4ce42;color:white;'>";
+                            echo "<td><span class='glyphicon glyphicon-exclamation-sign'></span> ".$piutang->piut_duedate."</td>";
                             echo "<td>".$piutang->piut_desc."</td>";
                             echo "<td>".$piutang->piut_name."</td>";
                             echo "<td>".number_format($piutang->piut_amount)."</td>";
                             echo "<td><a class ='btn btn-primary'href='/piutangs/".$piutang->piut_id."'>Detail</a></td>";
                             echo "</tr>";
                           }
-                          $x++;
-                          if($x == $size){
-                            break;
+                          else if($piutang->piut_duedate < $date){
+                            echo "<tr style='background-color:#f44242;color:white;'>";
+                            echo "<td><span class='glyphicon glyphicon-exclamation-sign'></span> ".$piutang->piut_duedate."</td>";
+                            echo "<td>".$piutang->piut_desc."</td>";
+                            echo "<td>".$piutang->piut_name."</td>";
+                            echo "<td>".number_format($piutang->piut_amount)."</td>";
+                            echo "<td><a class ='btn btn-primary'href='/piutangs/".$piutang->piut_id."'>Detail</a></td>";
+                            echo "</tr>";
+                          }
+                          else if($piutang->piut_duedate > $date){
+                            // echo "<tr>";
+                            // echo "<td>".$piutang->piut_duedate."</td>";
+                            // echo "<td>".$piutang->piut_desc."</td>";
+                            // echo "<td>".$piutang->piut_name."</td>";
+                            // echo "<td>".number_format($piutang->piut_amount)."</td>";
+                            // echo "<td><a class ='btn btn-primary'href='/piutangs/".$piutang->piut_id."'>Detail</a></td>";
+                            // echo "</tr>";
                           }
                         }
+                        // foreach($piutangs as $piutang){
+                        //   if($piutang->piut_id == $piut_duedates[$x]){
+                        //     if($piut_days[$x] < 7){
+                        //         echo "<tr style='background-color:#f4ce42;color:white;'>";
+                        //     }
+                        //     else{
+                        //       echo "<tr>";
+                        //     }
+                        //     if($piut_days[$x] < 3){
+                        //       echo "<td><span class='glyphicon glyphicon-exclamation-sign'></span> ".$piutang->piut_duedate."</td>";
+                        //     }
+                        //     else{
+                        //       echo "<td>".$piutang->piut_duedate."</td>";
+                        //     }
+                        //     echo "<td>".$piutang->piut_desc."</td>";
+                        //     echo "<td>".$piutang->piut_name."</td>";
+                        //     echo "<td>".number_format($piutang->piut_amount)."</td>";
+                        //     echo "<td><a class ='btn btn-primary'href='/piutangs/".$piutang->piut_id."'>Detail</a></td>";
+                        //     echo "</tr>";
+                        //   }
+                        //   $x++;
+                        //   if($x == $size){
+                        //     break;
+                        //   }
+                        // }
 
                       }
 
@@ -122,6 +166,16 @@
               <div class="panel-body">
                 <p>Total Utang</p>
                 <h3>Rp {{number_format($totUtang)}}</h3>
+                <table>
+                  <tr>
+                    <td><span class='glyphicon glyphicon-stop' style="color:#f4ce42;"></span></td>
+                    <td>Kurang dari 7 hari menuju deadline</td>
+                  </tr>
+                  <tr>
+                    <td><span class='glyphicon glyphicon-stop' style="color:#f44242;"></span></td>
+                    <td>Lewat Deadline</td>
+                  </tr>
+                </table>
                 <table class="table">
                   <tr>
                     <th>Tanggal Jatuh Tempo</th>
@@ -137,27 +191,61 @@
                       }
                       else{
                         $x = 0;
+                        $date = date('Y-m-d');
+                        $date1 = date_create($date);
                         foreach($utangs as $utang){
-                          if($utang->utg_id == $utg_duedates[$x]){
-
-                            if($utg_days[$x] < 3){
-                                echo "<tr style='background-color:#f4ce42;color:white;'>";
-                            }
-                            else{
-                              echo "<tr>";
-                            }
+                          $date2 = date_create($utang->utg_duedate);
+                          $days_left = $date2->diff($date1);
+                          $int = $days_left->days;
+                          if($utang->utg_duedate > $date && $int <= 7){
+                            echo "<tr style='background-color:#f4ce42;color:white;'>";
                             echo "<td><span class='glyphicon glyphicon-exclamation-sign'></span> ".$utang->utg_duedate."</td>";
                             echo "<td>".$utang->utg_desc."</td>";
                             echo "<td>".$utang->utg_name."</td>";
                             echo "<td>".number_format($utang->utg_amount)."</td>";
-                            echo "<td><a class ='btn btn-primary'href='/utangs/".$utang->utg_id."'>Detail</a></td>";
+                            echo "<td><a class ='btn btn-primary'href='/piutangs/".$utang->utg_id."'>Detail</a></td>";
                             echo "</tr>";
                           }
-                          $x++;
-                          if($x == $size_utg){
-                            break;
+                          else if($utang->utg_duedate < $date){
+                            echo "<tr style='background-color:#f44242;color:white;'>";
+                            echo "<td><span class='glyphicon glyphicon-exclamation-sign'></span> ".$utang->utg_duedate."</td>";
+                            echo "<td>".$utang->utg_desc."</td>";
+                            echo "<td>".$utang->utg_name."</td>";
+                            echo "<td>".number_format($utang->utg_amount)."</td>";
+                            echo "<td><a class ='btn btn-primary'href='/piutangs/".$utang->utg_id."'>Detail</a></td>";
+                            echo "</tr>";
+                          }
+                          else if($utang->utg_duedate > $date){
+                            // echo "<tr>";
+                            // echo "<td>".$piutang->piut_duedate."</td>";
+                            // echo "<td>".$piutang->piut_desc."</td>";
+                            // echo "<td>".$piutang->piut_name."</td>";
+                            // echo "<td>".number_format($piutang->piut_amount)."</td>";
+                            // echo "<td><a class ='btn btn-primary'href='/piutangs/".$piutang->piut_id."'>Detail</a></td>";
+                            // echo "</tr>";
                           }
                         }
+                        // foreach($utangs as $utang){
+                        //   if($utang->utg_id == $utg_duedates[$x]){
+                        //
+                        //     if($utg_days[$x] < 3){
+                        //         echo "<tr style='background-color:#f4ce42;color:white;'>";
+                        //     }
+                        //     else{
+                        //       echo "<tr>";
+                        //     }
+                        //     echo "<td><span class='glyphicon glyphicon-exclamation-sign'></span> ".$utang->utg_duedate."</td>";
+                        //     echo "<td>".$utang->utg_desc."</td>";
+                        //     echo "<td>".$utang->utg_name."</td>";
+                        //     echo "<td>".number_format($utang->utg_amount)."</td>";
+                        //     echo "<td><a class ='btn btn-primary'href='/utangs/".$utang->utg_id."'>Detail</a></td>";
+                        //     echo "</tr>";
+                        //   }
+                        //   $x++;
+                        //   if($x == $size_utg){
+                        //     break;
+                        //   }
+                        // }
                       }
 
                      ?>

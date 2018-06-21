@@ -136,5 +136,8 @@
         </tr>
       @endforeach
     </table>
+    <center>
+      {{ $invoices->links() }}
+    </center>
   </div>
 @endsection

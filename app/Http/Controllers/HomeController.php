@@ -39,7 +39,7 @@ class HomeController extends Controller
         $incomes = Income::where('in_deletedAt',NULL)->orderBy('created_at','desc')->get();
         $outcomes = Outcome::where('out_deletedAt',NULL)->orderBy('created_at','desc')->get();
         $invoices = Invoice::where('deleted_at',NULL)->where('inv_status',1)->orderBy('created_at','desc')->get();
-        $utangs = Utang::where('utg_deletedAt',NULL)->orderBy('created_at','desc')->get();
+        $utangs = Utang::where('utg_deletedAt',NULL)->where('utg_paiddate',NULL)->orderBy('created_at','desc')->get();
         $piutangs = Piutang::where('piut_deletedAt',NULL)->where('piut_paiddate',NULL)->orderBy('created_at','desc')->get();
         $totIncomes = 0;
         $totOutcomes = 0;

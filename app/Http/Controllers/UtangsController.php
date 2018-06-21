@@ -163,6 +163,7 @@ class UtangsController extends Controller
           'utg_duedate' => 'required',
 
         ]);
+        $utg_paiddate = $request->input('utg_paiddate');
         $utang = Utang::find($utg_id);
         $utang->utg_type = $request->input('utg_type');
         $utang->utg_duedate = $request->input('utg_duedate');
@@ -175,6 +176,18 @@ class UtangsController extends Controller
         $utang->utg_desc = $request->input('utg_desc');
         $utang->save();
 
+        if($utg_paiddate != NULL){
+          $outcome = new Outcome;
+          $outcome->out_type = 13;
+          $out_type = 13;
+          $outcome->out_name = "Pembayaran Utang";
+          $outcome->out_amount = $request->input('utg_amount');
+          $outcome->out_date = $request->input('utg_paiddate');
+          $outcome->user_id = auth()->user()->id;
+          $outcome->out_desc = $request->input('utg_desc');
+          $outcome->out_deleteStat = 0;
+          $outcome->save();
+        }
         // $out_obj = DB::table('outcomes')->where('utg_id',$utg_id)->first();
         // $out_id = $out_obj->out_id;
         //

@@ -11,13 +11,17 @@
         <h2>Laporan Laba Rugi</h2>
         <small>Pilih periode yang akan dicakup oleh laporan</small>
         {!! Form::open(['action' => 'IncomeStatementController@create', 'method' => 'GET']) !!}
-          <div class="form-group">
+          {{-- <div class="form-group">
             {{Form::label('period1',"Mulai Periode")}}
             {{Form::date('period1','',['class'=>'form-control'])}}
           </div>
           <div class="form-group">
             {{Form::label('period2',"Akhir Periode")}}
             {{Form::date('period2','',['class'=>'form-control'])}}
+          </div> --}}
+          <div class="form-group">
+            {{Form::label('year',"Periode")}}
+            {{Form::number('year','',['class'=>'form-control','min'=>'2017'])}}
           </div>
           {{Form::submit('Submit',['class'=>'btn btn-primary form-control'])}}
         {!! Form::close() !!}

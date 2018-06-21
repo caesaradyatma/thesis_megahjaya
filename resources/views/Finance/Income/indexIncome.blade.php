@@ -62,7 +62,9 @@
         </tr>
       @endforeach
     </table>
-    {{$incomes->links()}};
+    <center>
+      {{$incomes->links()}};
+    </center>
   @else
     <div class="btn-danger">
       <p>There are no posts</p>

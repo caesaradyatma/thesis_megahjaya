@@ -4,6 +4,7 @@
 
 @section('content')
   <h1>Piutang</h1>
+  <hr>
   <div class="col-sm-4">
       <a href="piutangs/create" class="btn btn-primary">Input data Piutang</a>
   </div>
@@ -40,7 +41,20 @@
             @if ($piutang->piut_status == 1)
               <p style="background-color:green;color:white;">Lunas</p>
             @elseif ($piutang->piut_status == 0)
-              <p>Belum Lunas</p>
+              <?php
+                $date = date('Y-m-d');
+                $date1 = date_create($date);
+                $date2 = date_create($piutang->piut_duedate);
+                $days_left = $date2->diff($date1);
+                $int = $days_left->days;
+              ?>
+              @if($piutang->piut_duedate > $date && $int <= 7)
+                <p><span class='glyphicon glyphicon-exclamation-sign'style="color:#f4ce42;"></span>Belum Lunas</p>
+              @elseif($piutang->piut_duedate < $date)
+                <p><span class='glyphicon glyphicon-exclamation-sign'style="color:#f44242;"></span>Belum Lunas</p>
+              @else
+                <p>Belum Lunas</p>
+              @endif
             @endif
           </td>
           <td>
@@ -63,6 +77,9 @@
         </tr>
       @endforeach
     </table>
+    <center>
+      {{ $piutangs->links() }}
+    </center>
     {{-- {{$pipiutangs->links()}}; --}}
   @else
     <div class="btn-danger">

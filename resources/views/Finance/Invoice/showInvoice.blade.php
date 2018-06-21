@@ -73,6 +73,19 @@
           <th>Alamat</th>
           <td>{{$invoice->inv_address}}</td>
         </tr>
+        <tr>
+          <th>PPN 10%</th>
+          <td>
+            <?php
+              if($invoice->inv_tax == 1){
+                echo "Ya";
+              }
+              else{
+                echo "Tidak";
+              }
+             ?>
+          </td>
+        </tr>
       </table>
     </div>
   </div>
@@ -94,9 +107,12 @@
         </tr>
       @endforeach
       <tr>
-        <th colspan="3">Total Price</th>
+        <th colspan="3">Total</th>
         <td>{{number_format($totPrice)}}</td>
         <td></td>
+      </tr>
+      <tr>
+        <td colspan="3" style="text-align:left;"><small>termasuk PPN 10% jika diterapkan</small></td>
       </tr>
   </table>
 

@@ -8,7 +8,7 @@
       <div class="col-sm-3">
       </div>
       <div class="col-sm-6">
-        <h2>General Ledger</h2>
+        <h2>Pembukuan</h2>
         <small>Pilih periode yang akan dicakup oleh laporan</small>
         {!! Form::open(['action' => 'GeneralLedgerController@create', 'method' => 'GET']) !!}
           {{-- <div class="form-group">

@@ -68,5 +68,8 @@
           </tr>
         @endforeach
       </table>
+      <center>
+        {{ $employees->links() }}
+      </center>
   </div>
 @endsection

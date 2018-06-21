@@ -137,8 +137,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="/balance">
-                                    Neraca
+                                <a href="/ledger">
+                                    Pembukuan
                                 </a>
                             </li>
                         </ul>

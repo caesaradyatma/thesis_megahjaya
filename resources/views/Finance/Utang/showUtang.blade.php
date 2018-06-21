@@ -67,8 +67,11 @@
       </td>
     </tr>
   </table>
+  @if($utang->utg_status == 0){
+      <a href="/utangs/{{$utang->utg_id}}/edit" class="btn btn-warning">Edit Data</a>
+  }
+  @endif
 
-  <a href="/utangs/{{$utang->utg_id}}/edit" class="btn btn-warning">Edit Data</a>
 
   {!!Form::open(['action'=>['UtangsController@destroy',$utang->utg_id],'method'=>'POST','class'=>'pull-right','onsubmit'=>"return confirm('Apakah anda yakin akan menghapus data ini?');"])!!}
     {{Form::hidden('_method','DELETE')}}

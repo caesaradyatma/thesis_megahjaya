@@ -115,6 +115,10 @@
         {{Form::label('inv_type', 'Jenis Transaksi')}}
         {{Form::select('inv_type',[1=>'Bon 1',2=>'Bon 2 Tunai',3=>'Bon 3',4=>'Bon 2 Utang'],'',['class'=>'form-control'])}}
       </div>
+      <div class="form-group">
+        {{Form::label('inv_tax', 'PPN 10%')}}
+        {{Form::select('inv_tax',[0=>'Tidak',1=>'Ya'],'',['class'=>'form-control'])}}
+      </div>
       {{-- <div class="form-group1">
         <label for="Products">Barang yang Dipesan</label>
         <table id="prod">

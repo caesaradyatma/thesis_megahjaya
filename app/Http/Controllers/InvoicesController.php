@@ -157,6 +157,11 @@ class InvoicesController extends Controller
         $oldCart = Session::get('cart');
         $cart = new Cart($oldCart);
         $products = $cart->items;
+        $price = $request->input('inv_totPrice');
+        $tax = $request->input('inv_tax');
+        if($tax == 1){
+          $price = ($price * 10/100) + $price;
+        }
 
         if($cst_name == NULL && $cst_company == NULL){
           return redirect('invoices/getCart')->with('error','Nama Pelanggan atau Nama Perusahaan harus di isi');
@@ -165,10 +170,11 @@ class InvoicesController extends Controller
           $cst_id = $customer->id;
           $invoice = new Invoice;
           $invoice->inv_date = $request->input('inv_date');
-          $invoice->inv_totPrice = $request->input('inv_totPrice');
+          $invoice->inv_totPrice = $price;
           $invoice->inv_type = $request->input('inv_type');
           $invoice->inv_phone = $request->input('inv_phone');
           $invoice->inv_address = $request->input('inv_address');
+          $invoice->inv_tax = $tax;
           $inv_type = $request->input('inv_type');
           $date =  $request->input('inv_date');
           if($inv_type == 1 || $inv_type == 2){
@@ -192,10 +198,11 @@ class InvoicesController extends Controller
             $invoice->inv_status=0;
             $piutang = new Piutang;
             $piutang->piut_name = $cst_name;
-            $piutang->piut_amount = $request->input('inv_totPrice');
+            $piutang->piut_amount = $price;
             $piutang->piut_desc = "Piutang penjualan";
             $duedate=Date('Y-m-d', strtotime("+30 days"));
             $piutang->piut_duedate =  $duedate;
+            $piutang->piut_type = 1;
             $piutang->save();
             $piutang = Piutang::where('piut_name',$cst_name)->orderBy('piut_id','desc')->first();
             $piut_id = $piutang->piut_id;
@@ -236,10 +243,11 @@ class InvoicesController extends Controller
 
           $invoice = new Invoice;
           $invoice->inv_date = $request->input('inv_date');
-          $invoice->inv_totPrice = $request->input('inv_totPrice');
+          $invoice->inv_totPrice = $price;
           $invoice->inv_type = $request->input('inv_type');
           $invoice->inv_phone = $request->input('inv_phone');
           $invoice->inv_address = $request->input('inv_address');
+          $invoice->inv_tax = $tax;
           $inv_type = $request->input('inv_type');
           $invoice->cst_id = $custID;
           if($inv_type == 1 || $inv_type == 2){
@@ -249,10 +257,11 @@ class InvoicesController extends Controller
             $invoice->inv_status=0;
             $piutang = new Piutang;
             $piutang->piut_name = $cst_name;
-            $piutang->piut_amount = $request->input('inv_totPrice');
+            $piutang->piut_amount = $price;
             $piutang->piut_desc = "Piutang penjualan";
             $duedate=Date('Y-m-d', strtotime("+30 days"));
             $piutang->piut_duedate =  $duedate;
+            $piutang->piut_type = 1;
             $piutang->save();
             $piutang = Piutang::where('piut_name',$cst_name)->orderBy('piut_id','desc')->first();
             $piut_id = $piutang->piut_id;
@@ -865,7 +874,9 @@ class InvoicesController extends Controller
             // print_r($test);
 
             $products = $test['items'];
-            $totPrice = $test['totPrice'];
+            // $totPrice = $test['totPrice'];
+            $totPrice = $invoice->inv_totPrice;
+
             // foreach($products as $product){
             //   echo $product['item']['item_name'];
             //   echo $product['order_quantity'];
@@ -883,7 +894,9 @@ class InvoicesController extends Controller
             // print_r($test);
 
             $products = $test['items'];
-            $totPrice = $test['totPrice'];
+            // $totPrice = $test['totPrice'];
+            $totPrice = $invoice->inv_totPrice;
+
             // foreach($products as $product){
             //   echo $product['item']['item_name'];
             //   echo $product['order_quantity'];

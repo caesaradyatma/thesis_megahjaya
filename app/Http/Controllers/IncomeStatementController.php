@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Income;
 use App\Outcome;
+use App\Invoice;
+use App\Utang;
 
 class IncomeStatementController extends Controller
 {
@@ -28,21 +30,25 @@ class IncomeStatementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
         // retrieve data from period
         // $period1 = $request->input('period1');
         // $period2 = $request->input('period2');
-        $period1 = date("Y-m-d",strtotime($request->input('period1')));
-        $period2 = date("Y-m-d",strtotime($request->input('period2')."+1 day"));
+        $year = $request->input('year');
+        $period1 = date("Y-m-d",strtotime($year."-01-01"));
+        $period2 = date("Y-m-d",strtotime($year."-12-31"));
+        // $period1 = date("Y-m-d",strtotime($request->input('period1')));
+        // $period2 = date("Y-m-d",strtotime($request->input('period2')."+1 day"));
         $incomes = Income::where('in_deletedAt',NULL)->whereBetween('in_date',[$period1,$period2])->get();
         // $outperiod1 = $request->input('period1');
         // $outperiod2 = $request->input('period2');
         $outcomes = Outcome::where('out_deletedAt',NULL)->whereBetween('out_date',[$period1,$period2])->get();
-
+        $open_inventory = 500000000;
+        $close_inventory = 780000000;
         $totIncomes = 0;
-        $totExpenses = 0;
+
         //total income
         // foreach($incomes as $income){
         //   $totIncomes = $totIncomes + $income->in_amount;
@@ -54,41 +60,62 @@ class IncomeStatementController extends Controller
 
         //retrieve incomes
         // $piutangs = Income::where('in_deletedAt',NULL)->where('in_type',1)->whereBetween('in_date',[$period1,$period2])->get();
-        $sales = Income::where('in_deletedAt',NULL)->where('in_type',2)->whereBetween('in_date',[$period1,$period2])->get();
+        $sales = Invoice::where('deleted_at',NULL)->where('inv_type',1)->orWhere('inv_type',2)->whereBetween('inv_date',[$period1,$period2])->get();
         // $totPiutangs = 0;
         $totSales = 0;
 
         //retrieve expenses
-        $costs = Outcome::where('out_deletedAt',NULL)->where('out_type',2)->whereBetween('out_date',[$period1,$period2])->get();
+        $utilities = Outcome::where('out_deletedAt',NULL)->where('out_type',3)->whereBetween('out_date',[$period1,$period2])->get();
+        $gasolines = Outcome::where('out_deletedAt',NULL)->where('out_type',5)->whereBetween('out_date',[$period1,$period2])->get();
+        $salaries = Outcome::where('out_deletedAt',NULL)->where('out_type',4)->whereBetween('out_date',[$period1,$period2])->get();
+        $totUtilities = 0;
         // $utangs = Outcome::where('out_deletedAt',NULL)->where('out_type',1)->whereBetween('out_date',[$period1,$period2])->get();
-        $totCosts = 0;
+        $totGasolines = 0;
+        $totSalary = 0;
         // $totUtangs = 0;
 
-        //count incomes
-        // foreach($piutangs as $piutang){
-        //   $totPiutangs = $totPiutangs + $piutang->in_amount;
-        // }
-        foreach($sales as $sale){
-          $totSales = $totSales + $sale->in_amount;
+        //retrieve purchases inventory
+        $totPurchased = 0;
+        $cash_stocks = Outcome::where('out_deletedAt',NULL)->where('out_type',11)->whereBetween('out_date',[$period1,$period2])->get();
+        $utg_stocks = Utang::where('utg_deletedAt',NULL)->where('utg_type',8)->whereBetween('created_at',[$period1,$period2])->get();
+        foreach($utg_stocks as $utg_stock){
+          $totPurchased = $totPurchased + $utg_stock->utg_amount;
         }
-        $totIncomes = $totSales;
+
+        //count Sales
+        foreach($sales as $sale){
+          $totSales = $totSales + $sale->inv_totPrice;
+        }
+
+        //count incomes
+        foreach($incomes as $income){
+          $totIncomes = $totIncomes + $income->in_amount;
+        }
 
         //count expenses
-        // foreach($utangs as $utang){
-        //   $totUtangs = $totUtangs + $utang->out_amount;
-        // }
-
-        foreach($costs as $cost){
-          $totCosts = $totCosts + $cost->out_amount;
+        foreach($utilities as $utility){
+          $totUtilities = $totUtilities + $utility->out_amount;
         }
-        $totExpenses = $totCosts;
+        foreach($gasolines as $gasoline){
+          $totGasolines = $totGasolines + $gasoline->out_amount;
+        }
+        foreach($salaries as $salary){
+          $totSalary = $totSalary + $salary->out_amount;
+        }
+
+        $totExpenses = $totUtilities + $totGasolines + $totSalary;
 
         return view('/finance.Report.showIncomeStatement')
         ->with('totIncomes',$totIncomes)
         ->with('totExpenses',$totExpenses)
         ->with('totSales',$totSales)
-        ->with('costs',$costs)
-        ->with('totCosts',$totCosts);
+        ->with('totPurchased',$totPurchased)
+        ->with('totUtilities',$totUtilities)
+        ->with('totGasolines', $totGasolines)
+        ->with('totSalary', $totSalary)
+        ->with('year',$year)
+        ->with('open_inventory',$open_inventory)
+        ->with('close_inventory',$close_inventory);
         // return view('/finance.Report.showIncomeStatement')->with('incomes',$incomes);
     }
 

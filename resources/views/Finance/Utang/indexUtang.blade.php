@@ -41,7 +41,20 @@
             @if ($utang->utg_status == 1)
               <p style="background-color:green;color:white;">Lunas</p>
             @elseif ($utang->utg_status == 0)
-              <p>Belum Lunas</p>
+              <?php
+                $date = date('Y-m-d');
+                $date1 = date_create($date);
+                $date2 = date_create($utang->utg_duedate);
+                $days_left = $date2->diff($date1);
+                $int = $days_left->days;
+              ?>
+              @if($utang->utg_duedate > $date && $int <= 7)
+                <p><span class='glyphicon glyphicon-exclamation-sign'style="color:#f4ce42;"></span>Belum Lunas</p>
+              @elseif($utang->utg_duedate < $date)
+                <p><span class='glyphicon glyphicon-exclamation-sign'style="color:#f44242;"></span>Belum Lunas</p>
+              @else
+                <p>Belum Lunas</p>
+              @endif
             @endif
           </td>
           <td>
@@ -64,6 +77,9 @@
         </tr>
       @endforeach
     </table>
+    <center>
+      {{ $utangs->links() }}
+    </center>
     {{-- {{$utangs->links()}}; --}}
   @else
     <div class="btn-danger">
